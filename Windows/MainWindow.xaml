@@ -18,7 +18,7 @@
             <ColumnDefinition Width="7*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <WindowsFormsHost Grid.Row="1">
+        <WindowsFormsHost Grid.Row="1" Focusable="False">
             <dw:Chart x:Name="ChartPoint">
                 <dw:Chart.ChartAreas>
                     <dw:ChartArea Name="MainChartArea"/>
@@ -72,5 +72,6 @@
             <Button x:Name="ButtonRemovePoint" Content="Удалить точку" Margin="9,2,9,2" IsEnabled="False" FontSize="11"/>
             <Button x:Name="ButtonRemoveSeries" Content="Удалить коллекцию" Grid.Column="1" Margin="9,2,9,2" IsEnabled="False" FontSize="11"/>
         </Grid>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Right" Margin="225,0,7,0" TextWrapping="Wrap" Text="0.3a" VerticalAlignment="Center" FontFamily="Cascadia Mono SemiBold"/>
     </Grid>
 </Window>

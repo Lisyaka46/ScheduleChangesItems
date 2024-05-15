@@ -263,14 +263,6 @@ namespace ScheduleChangesItems
             SelectedIndexPoint = new List<int>();
             SelectedIndexPoint.AddRange(Data.Select((i) => i.Points.Count - 1));
 
-            //ButtonCreateFile.IsEnabled = false;
-            ButtonOpenFile.IsEnabled = false;
-            ButtonSaveFile.IsEnabled = true;
-            ButtonAddNewPoint.IsEnabled = true;
-            //ButtonRemovePoint.IsEnabled = true;
-            ButtonRemoveSeries.IsEnabled = true;
-            ButtonAddNewSeries.IsEnabled = true;
-
             foreach (Series s in Data)
             {
                 ListSeriesesBox.Items.Add(s.Name);
@@ -279,6 +271,18 @@ namespace ScheduleChangesItems
                 s.Enabled = false;
                 ChartPoint.Series.Add(s);
             }
+
+            //ButtonCreateFile.IsEnabled = false;
+            ButtonOpenFile.IsEnabled = false;
+            //ButtonRemovePoint.IsEnabled = true;
+            if (ListSeriesesBox.Items.Count > 0)
+            {
+                ButtonAddNewPoint.IsEnabled = true;
+                ButtonRemoveSeries.IsEnabled = true;
+            }
+            ButtonAddNewSeries.IsEnabled = true;
+            ButtonSaveFile.IsEnabled = true;
+
             if (SelectedIndexSeries != -1)
             {
                 ChartPoint.Series[SelectedIndexSeries].Enabled = true;
@@ -317,16 +321,20 @@ namespace ScheduleChangesItems
         {
             if (ChartPoint.Series[SelectedIndexSeries].Points.Count > 0)
             {
-                ChartPoint.ChartAreas[0].AxisY.Maximum = ChartPoint.Series[SelectedIndexSeries].Points.Max((i) => i.YValues[0]) * 1.1;
-                ChartPoint.ChartAreas[0].AxisY.Interval = Math.Round(ChartPoint.ChartAreas[0].AxisY.Maximum / 6, 2);
+                double Max = ChartPoint.Series[SelectedIndexSeries].Points.Max((i) => i.YValues[0]) * 1.1;
+                double Min = ChartPoint.Series[SelectedIndexSeries].Points.Min((i) => i.YValues[0]) * 1.1;
+                if (Math.Abs(Min) + Max == 0) return;
+                ChartPoint.ChartAreas[0].AxisY.Maximum = Max;
+                ChartPoint.ChartAreas[0].AxisY.Minimum = Min;
+                ChartPoint.ChartAreas[0].AxisY.Interval = Math.Round((Math.Abs(Min) + Max) / 6, 2);
             }
         }
 
         private async Task UpdateInformation()
         {
             Series s = ChartPoint.Series[SelectedIndexSeries];
+            double ActNum = s.Points[SelectedIndexPoint[SelectedIndexSeries]].YValues[0];
 
-            double Max = s.Points.Sum((i) => i.YValues[0]);
             double Consumption = await Task.Run(() =>
             {
                 double x = 0d;
@@ -339,19 +347,31 @@ namespace ScheduleChangesItems
                 }
                 return x;
             });
-            int Trend = await Task.Run(() =>
+            int Trend = (int)await Task.Run(() =>
             {
-                if (SelectedIndexPoint[SelectedIndexSeries] == -1) return 0;
-                else if (SelectedIndexPoint[SelectedIndexSeries] == 0) return 100;
+                if (SelectedIndexPoint[SelectedIndexSeries] == -1) return 0d;
+                else if (SelectedIndexPoint[SelectedIndexSeries] == 0) return 100d;
                 else
                 {
-                    return (int)((s.Points[SelectedIndexPoint[SelectedIndexSeries]].YValues[0] / s.Points[SelectedIndexPoint[SelectedIndexSeries] - 1].YValues[0] - 1) * 100);
+                    double Difference = Math.Abs(s.Points[SelectedIndexPoint[SelectedIndexSeries] - 1].YValues[0] - ActNum);
+                    if (Difference == 0) return 0d;
+                    else return (Difference / ActNum) * 100d;
                 }
             });
-            TextAllGive.Text = $"Всего было создано: {Max}";
+            int AllTrend = (int)await Task.Run(() =>
+            {
+                if (SelectedIndexPoint[SelectedIndexSeries] == -1) return 0d;
+                else if (SelectedIndexPoint[SelectedIndexSeries] == 0) return 100d;
+                else
+                {
+                    double Difference = Math.Abs(s.Points[0].YValues[0] - ActNum);
+                    if (Difference == 0) return 0d;
+                    else return (Difference / ActNum) * 100d;
+                }
+            });
+            TextAllGive.Text = $"Всего было создано: {s.Points.Sum((i) => i.YValues[0])}";
             TextAllRemove.Text = $"Всего было использовано: {Consumption}";
-            TextAllTrend.Text = "Тенденция относительно начального значения: " +
-                $"{(int)(s.Points.Count > 0 ? (s.Points[SelectedIndexPoint[SelectedIndexSeries]].YValues[0] / s.Points[0].YValues[0] - 1) * 100 : 0)}%";
+            TextAllTrend.Text = $"Тенденция относительно начального значения: {AllTrend}%";
             TextTrend.Text = $"Тенденция относительно предыдущего значения: {Trend}%";
         }
     }
