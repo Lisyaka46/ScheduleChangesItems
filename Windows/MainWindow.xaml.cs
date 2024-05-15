@@ -88,7 +88,7 @@ namespace ScheduleChangesItems
                 if (DirectoryJobFile != null)
                 {
                     MessageBoxResult Result = MessageBox.Show("Вы уверены что хотите закрыть приложение не сохранив изменённые данные?",
-                        $"Закрытие файла {System.IO.Path.GetFileName(DirectoryJobFile)}", MessageBoxButton.YesNo);
+                        $"Закрытие файла {Path.GetFileName(DirectoryJobFile)}", MessageBoxButton.YesNo);
                     if (Result == MessageBoxResult.Yes)
                     {
                         ChartPoint.Series.Clear();
@@ -192,7 +192,6 @@ namespace ScheduleChangesItems
             };
             ButtonRemoveSeries.Click += (sender, e) =>
             {
-                // добавить удаление коллекции
                 MessageBoxResult Result = MessageBox.Show($"Вы точно хотите удалить коллекцию \"{ListSeriesesBox.SelectedItem}\"?",
                     "Подтверждение удаления", MessageBoxButton.YesNo);
                 if (Result == MessageBoxResult.Yes)
