@@ -71,6 +71,6 @@
             <Button x:Name="ButtonRemovePoint" Content="Удалить точку" Margin="9,2,9,2" IsEnabled="False" FontSize="11"/>
             <Button x:Name="ButtonRemoveSeries" Content="Удалить коллекцию" Grid.Column="1" Margin="9,2,9,2" IsEnabled="False" FontSize="11"/>
         </Grid>
-        <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="0.3.1b" VerticalAlignment="Center" FontFamily="Cascadia Mono SemiBold" FontSize="13" Height="16" Width="46" Margin="1,0,7,0" FontWeight="Medium" FontStyle="Italic" FontStretch="Medium"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="0.3.1с" VerticalAlignment="Center" FontFamily="Cascadia Mono SemiBold" FontSize="13" Height="16" Width="46" Margin="1,0,7,0" FontWeight="Medium" FontStyle="Italic" FontStretch="Medium"/>
     </Grid>
 </Window>

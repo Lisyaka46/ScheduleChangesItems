@@ -324,7 +324,7 @@ namespace ScheduleChangesItems
                 double Min = ChartPoint.Series[SelectedIndexSeries].Points.Min((i) => i.YValues[0]) * 1.1;
                 if (Math.Abs(Min) + Max == 0) return;
                 ChartPoint.ChartAreas[0].AxisY.Maximum = Max;
-                if (Min < Max) ChartPoint.ChartAreas[0].AxisY.Minimum = Min;
+                if (Min < 0) ChartPoint.ChartAreas[0].AxisY.Minimum = Min;
                 else ChartPoint.ChartAreas[0].AxisY.Minimum = 0;
                 ChartPoint.ChartAreas[0].AxisY.Interval = Math.Round((Math.Abs(Min) + Max) / 6, 2);
             }
@@ -353,7 +353,7 @@ namespace ScheduleChangesItems
                 else if (SelectedIndexPoint[SelectedIndexSeries] == 0) return 100d;
                 else
                 {
-                    double Difference = Math.Abs(s.Points[SelectedIndexPoint[SelectedIndexSeries] - 1].YValues[0] - ActNum);
+                    double Difference = ActNum - s.Points[SelectedIndexPoint[SelectedIndexSeries] - 1].YValues[0];
                     if (Difference == 0) return 0d;
                     else return (Difference / ActNum) * 100d;
                 }
@@ -364,7 +364,7 @@ namespace ScheduleChangesItems
                 else if (SelectedIndexPoint[SelectedIndexSeries] == 0) return 100d;
                 else
                 {
-                    double Difference = Math.Abs(s.Points[0].YValues[0] - ActNum);
+                    double Difference = ActNum - s.Points[0].YValues[0];
                     if (Difference == 0) return 0d;
                     else return (Difference / ActNum) * 100d;
                 }
