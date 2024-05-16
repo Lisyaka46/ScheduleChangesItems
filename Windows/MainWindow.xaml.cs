@@ -324,7 +324,8 @@ namespace ScheduleChangesItems
                 double Min = ChartPoint.Series[SelectedIndexSeries].Points.Min((i) => i.YValues[0]) * 1.1;
                 if (Math.Abs(Min) + Max == 0) return;
                 ChartPoint.ChartAreas[0].AxisY.Maximum = Max;
-                ChartPoint.ChartAreas[0].AxisY.Minimum = Min;
+                if (Min < Max) ChartPoint.ChartAreas[0].AxisY.Minimum = Min;
+                else ChartPoint.ChartAreas[0].AxisY.Minimum = 0;
                 ChartPoint.ChartAreas[0].AxisY.Interval = Math.Round((Math.Abs(Min) + Max) / 6, 2);
             }
         }
