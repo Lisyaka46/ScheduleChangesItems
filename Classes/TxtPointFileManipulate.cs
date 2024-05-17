@@ -32,9 +32,9 @@ namespace ScheduleChangesItems.Classes
         static List<Series> Series;
 
         /// <summary>
-        /// Объект выделяющихся цветов
+        /// Массив визуализационных объектов коллекции
         /// </summary>
-        static List<Color> Colors;
+        static List<VisualizationSeries> VisObjects;
 
         /// <summary>
         /// Объект рабочей коллекции
@@ -46,10 +46,10 @@ namespace ScheduleChangesItems.Classes
         /// </summary>
         /// <param name="Directory">Директория файла</param>
         /// <returns>Массив коллекций</returns>
-        public static (Series[], Color[])? ReadFile(string Directory)
+        public static (Series[], VisualizationSeries[])? ReadFile(string Directory)
         {
             Series = new List<Series>();
-            Colors = new List<Color>();
+            VisObjects = new List<VisualizationSeries>();
             Tag tag;
             string[] Lines = File.ReadAllLines(Directory);
             Error CheckErrorTag;
@@ -66,7 +66,7 @@ namespace ScheduleChangesItems.Classes
                     return null;
                 }
             };
-            if (RefSeriesManipulation == null) return (Series.ToArray(), Colors.ToArray());
+            if (RefSeriesManipulation == null) return (Series.ToArray(), VisObjects.ToArray());
             return null;
         }
 
@@ -89,23 +89,23 @@ namespace ScheduleChangesItems.Classes
         {
             switch (tag.Name)
             {
-                case "Series_Init":
+                case Tag.TagNaming.TagSeriesInit:
                     if (RefSeriesManipulation == null)
                     {
                         Series.Add(new Series(tag.Value, 1));
                         RefSeriesManipulation = Series[Series.Count - 1];
-                        Colors.Add(Color.FromArgb(80, 80, 80));
+                        VisObjects.Add(new VisualizationSeries(Color.Black, Color.FromArgb(80, 80, 80)));
                         break;
                     }
                     return Error.E7();
-                case "Name":
+                case Tag.TagNaming.TagName:
                     if (RefSeriesManipulation != null)
                     {
                         RefSeriesManipulation.Name = tag.Value;
                         break;
                     }
                     return Error.E2();
-                case "Point":
+                case Tag.TagNaming.TagPointTrend:
                     if (RefSeriesManipulation != null)
                     {
                         if (tag.Value.Length > 0)
@@ -120,7 +120,7 @@ namespace ScheduleChangesItems.Classes
                         return Error.E4(tag.Name);
                     }
                     return Error.E2();
-                case "Point_Name":
+                case Tag.TagNaming.TagPointNameTrend:
                     if (RefSeriesManipulation != null)
                     {
                         if (RefSeriesManipulation.Points.Count > 0)
@@ -131,29 +131,32 @@ namespace ScheduleChangesItems.Classes
                         return Error.E3();
                     }
                     return Error.E2();
-                case "Hex":
+                case Tag.TagNaming.TagHex:
                     if (RefSeriesManipulation != null)
                     {
                         if (tag.Value.Length > 0)
                         {
-                            RefSeriesManipulation.Color = ColorTranslator.FromHtml(tag.Value);
+                            Color color = ColorTranslator.FromHtml(tag.Value);
+                            RefSeriesManipulation.Color = color;
+                            VisObjects[VisObjects.Count - 1].ColorDefault = color;
                             break;
                         }
                         return Error.E4(tag.Name);
                     }
                     return Error.E2();
-                case "Select_Hex":
+                case Tag.TagNaming.TagSelectHex:
                     if (RefSeriesManipulation != null)
                     {
                         if (tag.Value.Length > 0)
                         {
-                            Colors[Colors.Count - 1] = ColorTranslator.FromHtml(tag.Value);
+                            Color color = ColorTranslator.FromHtml(tag.Value);
+                            VisObjects[VisObjects.Count - 1].ColorSelect = color;
                             break;
                         }
                         return Error.E4(tag.Name);
                     }
                     return Error.E2();
-                case "~":
+                case Tag.TagNaming.TagUninstallCollection:
                     if (RefSeriesManipulation != null)
                     {
                         RefSeriesManipulation = null;

@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="Classes\TxtPointFileManipulate.cs" />
     <Compile Include="Classes\TxtPoint\Tag.cs" />
+    <Compile Include="Classes\VisualizationSeries.cs" />
     <Compile Include="Windows\DialogAddSeries.xaml.cs">
       <DependentUpon>DialogAddSeries.xaml</DependentUpon>
     </Compile>

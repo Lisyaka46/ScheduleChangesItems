@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScheduleChangesItems.Classes;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -88,7 +89,7 @@ namespace ScheduleChangesItems.Windows
         /// Сгенерировать с помощью диалогового окна колекцию
         /// </summary>
         /// <returns>Коллекция (может быть пустой)</returns>
-        public (Series, System.Drawing.Color)? GenSeries(string[] NamesSeries)
+        public (Series, VisualizationSeries)? GenSeries(string[] NamesSeries)
         {
             NameSeriesesInicialized = NamesSeries;
             ShowDialog();
@@ -99,7 +100,8 @@ namespace ScheduleChangesItems.Windows
                     Color = DefColor,
                     Name = TextBoxNameSeries.Text
                 };
-                return (s, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelColorAuto : SelColor);
+                VisualizationSeries VisSeries = new VisualizationSeries(DefColor, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelColorAuto : SelColor);
+                return (s, VisSeries);
             }
             return null;
         }

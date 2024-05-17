@@ -50,9 +50,9 @@ namespace ScheduleChangesItems
         private Color SelectedColorPointSeries;
 
         /// <summary>
-        /// Цвет выделенной позиции тенденции
+        /// Массив визуализационных объектов коллекции
         /// </summary>
-        private List<Color> SelectedColorsPoint;
+        private List<VisualizationSeries> VisCollection;
 
         /// <summary>
         /// Инициализация главного окна формы
@@ -72,12 +72,12 @@ namespace ScheduleChangesItems
                 DirectoryJobFile = GetGirectoryOpenFile();
                 if (DirectoryJobFile != null)
                 {
-                    (Series[], Color[])? ReadSeries = TxtPointFileManipulate.ReadFile(DirectoryJobFile);
+                    (Series[], VisualizationSeries[])? ReadSeries = TxtPointFileManipulate.ReadFile(DirectoryJobFile);
                     if (ReadSeries.HasValue)
                     {
-                        if (SelectedColorsPoint != null) SelectedColorsPoint.Clear();
-                        else SelectedColorsPoint = new List<Color>();
-                        SelectedColorsPoint.AddRange(ReadSeries.Value.Item2);
+                        if (VisCollection != null) VisCollection.Clear();
+                        else VisCollection = new List<VisualizationSeries>();
+                        VisCollection.AddRange(ReadSeries.Value.Item2);
                         OpenData(ReadSeries.Value.Item1);
                     }
                     else DirectoryJobFile = null;
@@ -133,8 +133,8 @@ namespace ScheduleChangesItems
             };
             ButtonSaveFile.Click += (sender, e) =>
             {
-                string[] SeriesesTaging = ChartPoint.Series.Select((i) => TSeriesTagging(i)).ToArray();
-                File.WriteAllLines(DirectoryJobFile, SeriesesTaging);
+                string SeriesesTaging = TSeriesTagging(ChartPoint.Series);
+                File.WriteAllText(DirectoryJobFile, SeriesesTaging);
                 DirectoryJobFile = null;
                 ListSeriesesBox.SelectedIndex = -1;
                 ListPointsBox.SelectedIndex = -1;
@@ -177,12 +177,12 @@ namespace ScheduleChangesItems
             ButtonAddNewSeries.Click += (sender, e) =>
             {
                 DialogAddSeries dialogAddSeries = new DialogAddSeries();
-                (Series, Color)? s = dialogAddSeries.GenSeries(ChartPoint.Series.Select((i) => i.Name).ToArray());
+                (Series, VisualizationSeries)? s = dialogAddSeries.GenSeries(ChartPoint.Series.Select((i) => i.Name).ToArray());
                 if (s.HasValue)
                 {
                     ButtonAddNewPoint.IsEnabled = true;
                     ButtonRemoveSeries.IsEnabled = true;
-                    SelectedColorsPoint.Add(s.Value.Item2);
+                    VisCollection.Add(s.Value.Item2);
                     ChartPoint.Series.Add(s.Value.Item1);
                     ListSeriesesBox.Items.Add(s.Value.Item1.Name);
                     SelectedIndexPoint.Add(-1);
@@ -217,21 +217,30 @@ namespace ScheduleChangesItems
         /// <summary>
         /// Конвертировать объект TSepies в синтаксис тегов
         /// </summary>
-        /// <param name="series">Объект коллекции</param>
+        /// <param name="MassSeries">Объекты коллекции</param>
         /// <returns>Синтаксис тегов</returns>
-        private string TSeriesTagging(Series series)
+        private string TSeriesTagging(SeriesCollection MassSeries)
         {
-            if (series == null) return string.Empty;
+            if (MassSeries == null) return string.Empty;
             string Text = string.Empty;
-            Text += "<Series_Init>\n";
-            Text += $"<Name>{series.Name}<\n";
-            Text += $"<Hex>#{series.Color.A:X2}{series.Color.R:X2}{series.Color.G:X2}{series.Color.B:X2}<\n";
-            foreach (DataPoint p in series.Points)
+            VisualizationSeries VisSeries;
+            Series series;
+            for (int i = 0; i < MassSeries.Count; i++)
             {
-                Text += $"<Point>{p.YValues[0]}<\n";
-                if (p.Name.Length > 0) Text += $"<Point_Name>{p.Name}<\n";
+                VisSeries = VisCollection[i];
+                series = MassSeries[i];
+                Text += "<Series_Init>\n";
+                Text += $"<Name>{series.Name}<\n";
+                Text += $"<Hex>#{VisSeries.ColorDefault.A:X2}{VisSeries.ColorDefault.R:X2}{VisSeries.ColorDefault.G:X2}{VisSeries.ColorDefault.B:X2}<\n";
+                Text += $"<Select_Hex>#{VisSeries.ColorSelect.A:X2}{VisSeries.ColorSelect.R:X2}{VisSeries.ColorSelect.G:X2}{VisSeries.ColorSelect.B:X2}<\n";
+                foreach (DataPoint p in series.Points)
+                {
+                    Text += $"<Point>{p.YValues[0]}<\n";
+                    if (p.Name.Length > 0) Text += $"<Point_Name>{p.Name}<\n";
+                }
+                Text += "<~>\n";
+                if (i < MassSeries.Count - 1) Text += "\n";
             }
-            Text += "<~>\n";
             return Text;
         }
 
@@ -287,8 +296,8 @@ namespace ScheduleChangesItems
                 ChartPoint.Series[SelectedIndexSeries].Enabled = true;
                 ListSeriesesBox.SelectedIndex = SelectedIndexSeries;
                 ListPointsBox.SelectedIndex = SelectedIndexPoint[SelectedIndexSeries];
-                DefaultColorPointSeries = ChartPoint.Series[SelectedIndexSeries].Color;
-                SelectedColorPointSeries = SelectedColorsPoint[SelectedIndexSeries];
+                DefaultColorPointSeries = VisCollection[SelectedIndexSeries].ColorDefault;
+                SelectedColorPointSeries = VisCollection[SelectedIndexSeries].ColorSelect;
             }
         }
 
@@ -305,8 +314,8 @@ namespace ScheduleChangesItems
 
             SelectedIndexSeries = index;
 
-            DefaultColorPointSeries = s.Color;
-            SelectedColorPointSeries = SelectedColorsPoint[SelectedIndexSeries];
+            DefaultColorPointSeries = VisCollection[SelectedIndexSeries].ColorDefault;
+            SelectedColorPointSeries = VisCollection[SelectedIndexSeries].ColorSelect;
 
             ChartPoint.Series[SelectedIndexSeries].Enabled = true;
             Array.ForEach(s.Points.ToArray(), (i) => ListPointsBox.Items.Add(i.YValues[0]));
@@ -334,7 +343,6 @@ namespace ScheduleChangesItems
         {
             Series s = ChartPoint.Series[SelectedIndexSeries];
             double ActNum = s.Points[SelectedIndexPoint[SelectedIndexSeries]].YValues[0];
-
             double Consumption = await Task.Run(() =>
             {
                 double x = 0d;
@@ -347,32 +355,40 @@ namespace ScheduleChangesItems
                 }
                 return x;
             });
-            int Trend = (int)await Task.Run(() =>
-            {
-                if (SelectedIndexPoint[SelectedIndexSeries] == -1) return 0d;
-                else if (SelectedIndexPoint[SelectedIndexSeries] == 0) return 100d;
-                else
-                {
-                    double Difference = ActNum - s.Points[SelectedIndexPoint[SelectedIndexSeries] - 1].YValues[0];
-                    if (Difference == 0) return 0d;
-                    else return (Difference / ActNum) * 100d;
-                }
-            });
-            int AllTrend = (int)await Task.Run(() =>
-            {
-                if (SelectedIndexPoint[SelectedIndexSeries] == -1) return 0d;
-                else if (SelectedIndexPoint[SelectedIndexSeries] == 0) return 100d;
-                else
-                {
-                    double Difference = ActNum - s.Points[0].YValues[0];
-                    if (Difference == 0) return 0d;
-                    else return (Difference / ActNum) * 100d;
-                }
-            });
+            int Trend;
+
+            if (SelectedIndexPoint[SelectedIndexSeries] - 1 < s.Points.Count) Trend =
+                    (int)await Task.Run(() => MathTrend(s.Points[SelectedIndexPoint[SelectedIndexSeries] - 1].YValues[0], ActNum));
+            else if (ActNum < 0) Trend = -100;
+            else Trend = 100;
+            int AllTrend = (int)await Task.Run(() => MathTrend(s.Points[0].YValues[0], ActNum));
+
             TextAllGive.Text = $"Всего было создано: {s.Points.Sum((i) => i.YValues[0])}";
             TextAllRemove.Text = $"Всего было использовано: {Consumption}";
             TextAllTrend.Text = $"Тенденция относительно начального значения: {AllTrend}%";
             TextTrend.Text = $"Тенденция относительно предыдущего значения: {Trend}%";
+        }
+
+        /// <summary>
+        /// Вычислить процентное соотношение между двумя числами
+        /// </summary>
+        /// <param name="PreNum">Прошлое число</param>
+        /// <param name="ActNum">Текущее число</param>
+        /// <returns>процентное соотношение</returns>
+        private async Task<double> MathTrend(double PreNum, double ActNum)
+        {
+            return await Task.Run(() =>
+            {
+                double Difference = ActNum - PreNum;
+                if (Difference == 0) return 0d;
+                else if (PreNum == 0)
+                {
+                    if (ActNum < 0) return -100d;
+                    else return 100d;
+                }
+                else if (ActNum < 0 && PreNum < 0 || ActNum > 0 && PreNum < 0) return -(Difference / PreNum * 100d);
+                else return Difference / PreNum * 100d;
+            });
         }
     }
 }

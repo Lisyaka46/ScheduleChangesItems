@@ -48,5 +48,43 @@ namespace ScheduleChangesItems.Classes.TxtPoint
             result.Value = Value.ToString();
             return result;
         }
+
+        public sealed class TagNaming
+        {
+            /// <summary>
+            /// Тег инициализации коллекции
+            /// </summary>
+            public const string TagSeriesInit = "Series_Init";
+
+            /// <summary>
+            /// Тег имени коллекции
+            /// </summary>
+            public const string TagName = "Name";
+
+            /// <summary>
+            /// Тег создания позиции тенденции
+            /// </summary>
+            public const string TagPointTrend = "Point";
+
+            /// <summary>
+            /// Тег имени позиции тенденции
+            /// </summary>
+            public const string TagPointNameTrend = "Point_Name";
+
+            /// <summary>
+            /// Тег цвета коллекции
+            /// </summary>
+            public const string TagHex = "Hex";
+
+            /// <summary>
+            /// Тег выделенного цвета коллекции
+            /// </summary>
+            public const string TagSelectHex = "Select_Hex";
+
+            /// <summary>
+            /// Тег деинсталяции коллекции
+            /// </summary>
+            public const string TagUninstallCollection = "~";
+        }
     }
 }
