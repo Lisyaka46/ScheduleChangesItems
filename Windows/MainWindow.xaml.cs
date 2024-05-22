@@ -10,6 +10,11 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+using System.Windows.Navigation;
 
 namespace ScheduleChangesItems
 {
@@ -42,17 +47,42 @@ namespace ScheduleChangesItems
         /// <summary>
         /// Цвет обычного состояния позиции тенденции
         /// </summary>
-        private Color DefaultColorPointSeries;
+        private System.Drawing.Color DefaultColorPointSeries;
 
         /// <summary>
         /// Цвет выделенной позиции тенденции
         /// </summary>
-        private Color SelectedColorPointSeries;
+        private System.Drawing.Color SelectedColorPointSeries;
 
         /// <summary>
         /// Массив визуализационных объектов коллекции
         /// </summary>
         private List<VisualizationSeries> VisCollection;
+
+        /// <summary>
+        /// Удаление карты
+        /// </summary>
+        /// <param name="hObject">DeleteObject</param>
+        /// <returns></returns>
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject([In] IntPtr hObject);
+
+        /// <summary>
+        /// Конвертация из карты цвета в ImageSource
+        /// </summary>
+        /// <param name="bmp">Карта цвета</param>
+        /// <returns>ImageSource</returns>
+        public ImageSource ImageSourceFromBitmap(Bitmap bmp)
+        {
+            var handle = bmp.GetHbitmap();
+            try
+            {
+                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally { DeleteObject(handle); }
+        }
+
 
         /// <summary>
         /// Инициализация главного окна формы
@@ -67,7 +97,7 @@ namespace ScheduleChangesItems
                 DialogDeveloper dialogDeveloper = new DialogDeveloper();
                 dialogDeveloper.ShowDialog();
             };
-            ButtonOpenFile.Click += (sender, e) =>
+            ButtonOpenFile.MouseUp += (sender, e) =>
             {
                 DirectoryJobFile = GetGirectoryOpenFile();
                 if (DirectoryJobFile != null)
@@ -115,7 +145,7 @@ namespace ScheduleChangesItems
                 if (ListSeriesesBox.SelectedIndex == -1) return;
                 UpdateChartPoint(ListSeriesesBox.SelectedIndex);
             };
-            ButtonAddNewPoint.Click += (sender, e) =>
+            ButtonAddNewPoint.MouseUp += (sender, e) =>
             {
                 DialogAddPoint addPoint = new DialogAddPoint();
                 (string, int)? point = addPoint.GenerateTPoint();
@@ -131,7 +161,7 @@ namespace ScheduleChangesItems
                     _ = UpdateInformation();
                 }
             };
-            ButtonSaveFile.Click += (sender, e) =>
+            ButtonSaveFile.MouseUp += (sender, e) =>
             {
                 string SeriesesTaging = TSeriesTagging(ChartPoint.Series);
                 File.WriteAllText(DirectoryJobFile, SeriesesTaging);
@@ -141,10 +171,11 @@ namespace ScheduleChangesItems
                 ListSeriesesBox.Items.Clear();
                 ListPointsBox.Items.Clear();
                 ChartPoint.Series.Clear();
-                TextAllGive.Text = $"Всего было создано: X";
-                TextAllRemove.Text = $"Всего было использовано: X";
-                TextAllTrend.Text = "Тенденция относительно начального значения: X%";
-                TextTrend.Text = "Тенденция относительно предыдущего значения: X%";
+                TextAllGive.Text = $"Всего было создано: ?";
+                TextAllRemove.Text = $"Всего было использовано: ?";
+                TextAllTrend.Text = "Тенденция относительно начального значения: ?%";
+                TextTrend.Text = "Тенденция относительно предыдущего значения: ?%";
+                TextAllTrendChange.Text = $"Общий процент изменения тенденции: ?%";
 
                 //ButtonCreateFile.IsEnabled = true;
                 ButtonOpenFile.IsEnabled = true;
@@ -154,7 +185,7 @@ namespace ScheduleChangesItems
                 ButtonAddNewSeries.IsEnabled = false;
                 ButtonRemoveSeries.IsEnabled = false;
             };
-            ButtonRemovePoint.Click += (sender, e) =>
+            ButtonRemovePoint.MouseUp += (sender, e) =>
             {
                 MessageBoxResult Result = MessageBox.Show($"Вы точно хотите удалить точку \"{ListPointsBox.SelectedItem}\" из коллекции \"{ListSeriesesBox.SelectedItem}\"?",
                     "Подтверждение удаления", MessageBoxButton.YesNo);
@@ -174,7 +205,7 @@ namespace ScheduleChangesItems
                     UpdateLimitChating();
                 }
             };
-            ButtonAddNewSeries.Click += (sender, e) =>
+            ButtonAddNewSeries.MouseUp += (sender, e) =>
             {
                 DialogAddSeries dialogAddSeries = new DialogAddSeries();
                 (Series, VisualizationSeries)? s = dialogAddSeries.GenSeries(ChartPoint.Series.Select((i) => i.Name).ToArray());
@@ -190,7 +221,7 @@ namespace ScheduleChangesItems
                     //UpdateChartPoint(ListSeriesesBox.Items.Count - 1);
                 }
             };
-            ButtonRemoveSeries.Click += (sender, e) =>
+            ButtonRemoveSeries.MouseUp += (sender, e) =>
             {
                 MessageBoxResult Result = MessageBox.Show($"Вы точно хотите удалить коллекцию \"{ListSeriesesBox.SelectedItem}\"?",
                     "Подтверждение удаления", MessageBoxButton.YesNo);
@@ -342,7 +373,8 @@ namespace ScheduleChangesItems
         private async Task UpdateInformation()
         {
             Series s = ChartPoint.Series[SelectedIndexSeries];
-            double ActNum = s.Points[SelectedIndexPoint[SelectedIndexSeries]].YValues[0];
+            int index = SelectedIndexPoint[SelectedIndexSeries];
+            double ActNum = s.Points[index].YValues[0];
             double Consumption = await Task.Run(() =>
             {
                 double x = 0d;
@@ -355,18 +387,39 @@ namespace ScheduleChangesItems
                 }
                 return x;
             });
-            int Trend;
+            int Trend, TrendChange = 0;
 
-            if (SelectedIndexPoint[SelectedIndexSeries] - 1 < s.Points.Count) Trend =
-                    (int)await Task.Run(() => MathTrend(s.Points[SelectedIndexPoint[SelectedIndexSeries] - 1].YValues[0], ActNum));
+            if (index - 1 > -1) Trend =
+                    (int)await MathTrend(s.Points[index - 1].YValues[0], ActNum);
             else if (ActNum < 0) Trend = -100;
             else Trend = 100;
-            int AllTrend = (int)await Task.Run(() => MathTrend(s.Points[0].YValues[0], ActNum));
+            int AllTrend = (int)await MathTrend(s.Points[0].YValues[0], ActNum);
+
+            if (index > 0)
+            {
+                double Num = ActNum;
+                Func<double, double, bool> func = null;
+                if (ActNum <= s.Points[index - 1].YValues[0]) func = (x, y) => x <= y;
+                else if (ActNum >= s.Points[index - 1].YValues[0]) func = (x, y) => x >= y;
+                else TrendChange = 0;
+                if (func != null)
+                {
+                    for (int i = index - 1; i > -1; i--)
+                    {
+                        if (i == -1) break;
+                        if (func.Invoke(Num, s.Points[i].YValues[0])) Num = s.Points[i].YValues[0];
+                        else break;
+                    }
+                    TrendChange = (int)await MathTrend(Num, ActNum);
+                }
+            }
+            else TrendChange = Trend;
 
             TextAllGive.Text = $"Всего было создано: {s.Points.Sum((i) => i.YValues[0])}";
             TextAllRemove.Text = $"Всего было использовано: {Consumption}";
             TextAllTrend.Text = $"Тенденция относительно начального значения: {AllTrend}%";
             TextTrend.Text = $"Тенденция относительно предыдущего значения: {Trend}%";
+            TextAllTrendChange.Text = $"Общий процент изменения тенденции: {TrendChange}%";
         }
 
         /// <summary>

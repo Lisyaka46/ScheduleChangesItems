@@ -88,6 +88,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="GUI\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\DialogAddSeries.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,6 +115,9 @@
     <Compile Include="Classes\TxtPointFileManipulate.cs" />
     <Compile Include="Classes\TxtPoint\Tag.cs" />
     <Compile Include="Classes\VisualizationSeries.cs" />
+    <Compile Include="GUI\ImageButton.xaml.cs">
+      <DependentUpon>ImageButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DialogAddSeries.xaml.cs">
       <DependentUpon>DialogAddSeries.xaml</DependentUpon>
     </Compile>
@@ -167,6 +174,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Windows\History.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\ChartAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\DotDel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\DotAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\ChartDel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\SaveFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\OpenFile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
