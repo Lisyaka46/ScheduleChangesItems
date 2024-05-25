@@ -8,7 +8,7 @@ namespace ScheduleChangesItems.Windows
     /// <summary>
     /// Логика взаимодействия для DialogAddTPoint.xaml
     /// </summary>
-    public partial class DialogAddPoint : Window
+    public partial class DialogManagementPoint : Window
     {
         /// <summary>
         /// Создаваемая позиция
@@ -23,7 +23,7 @@ namespace ScheduleChangesItems.Windows
         /// <summary>
         /// Инициализация диалогового окна создающего позицию тенденции
         /// </summary>
-        public DialogAddPoint()
+        public DialogManagementPoint()
         {
             InitializeComponent();
             Height = 112;
@@ -46,6 +46,20 @@ namespace ScheduleChangesItems.Windows
         /// <returns>Позиция тенденции (Может быть пустой)</returns>
         internal (string, int)? GenerateTPoint()
         {
+            ShowDialog();
+            if (Complete) return _point;
+            return null;
+        }
+
+        /// <summary>
+        /// Редактировать точку тенденции
+        /// </summary>
+        /// <param name="point">Редактируемая точка</param>
+        /// <returns>Позиция тенденции (Может быть пустой)</returns>
+        internal (string, int)? ChangeInfoPoint(DataPoint point)
+        {
+            TextName.Text = point.AxisLabel;
+            TextValue.Text = ((int)point.YValues[0]).ToString();
             ShowDialog();
             if (Complete) return _point;
             return null;

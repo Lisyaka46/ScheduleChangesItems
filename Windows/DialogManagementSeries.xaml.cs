@@ -23,15 +23,15 @@ namespace ScheduleChangesItems.Windows
     /// <summary>
     /// Логика взаимодействия для DialogAddSeries.xaml
     /// </summary>
-    public partial class DialogAddSeries : Window
+    public partial class DialogManagementSeries : Window
     {
         private string[] NameSeriesesInicialized;
 
-        private System.Drawing.Color DefColor;
+        private System.Drawing.Color DefaultColor;
 
-        private System.Drawing.Color SelColor;
+        private System.Drawing.Color SelectColor;
 
-        private System.Drawing.Color SelColorAuto;
+        private System.Drawing.Color SelectColorAuto;
 
         private readonly ColorAnimation ColorAnim;
 
@@ -40,28 +40,27 @@ namespace ScheduleChangesItems.Windows
         /// <summary>
         /// Диалоговое окно для создания коллекции
         /// </summary>
-        public DialogAddSeries()
+        public DialogManagementSeries()
         {
             InitializeComponent();
             CheckBoxAutoSelectColor.IsChecked = true;
             DefaultColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
             SelectColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(80, 80, 80));
-            DefColor = System.Drawing.Color.FromArgb(0, 0, 0);
-            SelColor = System.Drawing.Color.FromArgb(80, 80, 80);
-            SelColorAuto = System.Drawing.Color.FromArgb(80, 80, 80);
+            DefaultColor = System.Drawing.Color.FromArgb(0, 0, 0);
+            SelectColor = System.Drawing.Color.FromArgb(80, 80, 80);
+            SelectColorAuto = System.Drawing.Color.FromArgb(80, 80, 80);
             ColorAnim = new ColorAnimation
             {
                 Duration = new Duration(TimeSpan.FromMilliseconds(100)),
             };
-            DefaultColorView.MouseLeftButtonUp += (sender, e) => SetColorDefault();
+            DefaultColorView.MouseLeftButtonUp += (sender, e) => SetColorDefault(DefaultColor);
             SelectColorView.MouseLeftButtonUp += (sender, e) =>
             {
-                SetColorSelect();
-                CheckBoxAutoSelectColor.IsChecked = false;
+                if (SetColorSelect((CheckBoxAutoSelectColor.IsChecked ?? false) ? SelectColorAuto : SelectColor)) CheckBoxAutoSelectColor.IsChecked = false;
             };
             CheckBoxAutoSelectColor.Checked += (sender, e) =>
             {
-                GenAutoColor(DefColor);
+                GenAutoColor(DefaultColor);
                 ChangeTypeSelColor();
             };
             CheckBoxAutoSelectColor.Unchecked += (sender, e) => ChangeTypeSelColor();
@@ -86,8 +85,35 @@ namespace ScheduleChangesItems.Windows
         }
 
         /// <summary>
+        /// Изменить данные коллекции с помощью диалогового окна
+        /// </summary>
+        /// <param name="NamesInitSeries">Массив уже проинициализированных имён коллекций</param>
+        /// <param name="NameSeries">Имя изменяемой коллекции</param>
+        /// <param name="VisSeries">Визуализационный объект коллекции</param>
+        /// <returns>Коллекция (может быть пустой)</returns>
+        public (string, VisualizationSeries)? ChangeInfoSeries(string[] NamesInitSeries, string NameSeries, VisualizationSeries VisSeries)
+        {
+            NameSeriesesInicialized = NamesInitSeries;
+            TextBoxNameSeries.Text = NameSeries;
+            DefaultColor = VisSeries.ColorDefault;
+            SelectColor = VisSeries.ColorSelect;
+            DefaultColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(VisSeries.ColorDefault.R, VisSeries.ColorDefault.G, VisSeries.ColorDefault.B));
+            SelectColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(VisSeries.ColorSelect.R, VisSeries.ColorSelect.G, VisSeries.ColorSelect.B));
+            CheckBoxAutoSelectColor.IsChecked = false;
+            ShowDialog();
+            if (Complete)
+            {
+                VisualizationSeries Vis = new VisualizationSeries(DefaultColor, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelectColorAuto : SelectColor);
+                return (TextBoxNameSeries.Text, Vis);
+            }
+            return null;
+        }
+
+
+        /// <summary>
         /// Сгенерировать с помощью диалогового окна колекцию
         /// </summary>
+        /// <param name="NamesSeries">Массив уже проинициализированных имён колекций</param>
         /// <returns>Коллекция (может быть пустой)</returns>
         public (Series, VisualizationSeries)? GenSeries(string[] NamesSeries)
         {
@@ -97,10 +123,10 @@ namespace ScheduleChangesItems.Windows
             {
                 Series s = new Series
                 {
-                    Color = DefColor,
+                    Color = DefaultColor,
                     Name = TextBoxNameSeries.Text
                 };
-                VisualizationSeries VisSeries = new VisualizationSeries(DefColor, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelColorAuto : SelColor);
+                VisualizationSeries VisSeries = new VisualizationSeries(DefaultColor, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelectColorAuto : SelectColor);
                 return (s, VisSeries);
             }
             return null;
@@ -112,9 +138,9 @@ namespace ScheduleChangesItems.Windows
         private void ChangeTypeSelColor()
         {
             if (CheckBoxAutoSelectColor.IsChecked ?? false)
-                ColorAnim.To = System.Windows.Media.Color.FromArgb(SelColorAuto.A, SelColorAuto.R, SelColorAuto.G, SelColorAuto.B);
+                ColorAnim.To = System.Windows.Media.Color.FromRgb(SelectColorAuto.R, SelectColorAuto.G, SelectColorAuto.B);
             else
-                ColorAnim.To = System.Windows.Media.Color.FromArgb(SelColor.A, SelColor.R, SelColor.G, SelColor.B);
+                ColorAnim.To = System.Windows.Media.Color.FromRgb(SelectColor.R, SelectColor.G, SelectColor.B);
             SelectColorView.Fill.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnim);
         }
 
@@ -125,30 +151,26 @@ namespace ScheduleChangesItems.Windows
         private void GenAutoColor(System.Drawing.Color color)
         {
             byte r, g, b;
-            r = color.R + 80 <= 255 ? (byte)(color.R + 80) : (byte)(255 - ((color.R + 80) % 256));
-            g = color.G + 80 <= 255 ? (byte)(color.G + 80) : (byte)(255 - ((color.G + 80) % 256));
-            b = color.B + 80 <= 255 ? (byte)(color.B + 80) : (byte)(255 - ((color.B + 80) % 256));
-            ColorAnimation ColorAnim = new ColorAnimation
-            {
-                From = ((SolidColorBrush)SelectColorView.Fill).Color,
-                To = System.Windows.Media.Color.FromArgb(color.A, r, g, b),
-                Duration = new Duration(TimeSpan.FromMilliseconds(100)),
-            };
-            SelColorAuto = System.Drawing.Color.FromArgb(color.A, r, g, b);
+            r = color.R + 80 <= 255 ? (byte)(color.R + 80) : (byte)(color.R - (80 - (255 - color.R)));
+            g = color.G + 80 <= 255 ? (byte)(color.G + 80) : (byte)(color.G - (80 - (255 - color.G)));
+            b = color.B + 80 <= 255 ? (byte)(color.B + 80) : (byte)(color.B - (80 - (255 - color.B)));
+            ColorAnim.To = System.Windows.Media.Color.FromArgb(color.A, r, g, b);
+            SelectColorAuto = System.Drawing.Color.FromArgb(color.A, r, g, b);
             SelectColorView.Fill.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnim);
         }
 
         /// <summary>
         /// Присвоить цвет обычного состояния параметру
         /// </summary>
-        private void SetColorDefault()
+        /// <param name="StartColor">Стартовый цвет</param>
+        private void SetColorDefault(System.Drawing.Color StartColor)
         {
-            System.Drawing.Color? color = ColorInDialogGen();
+            System.Drawing.Color? color = ColorInDialogGen(StartColor);
             if (color.HasValue)
             {
                 System.Drawing.Color Vcol = color.Value;
                 ColorAnim.To = System.Windows.Media.Color.FromArgb(Vcol.A, Vcol.R, Vcol.G, Vcol.B);
-                DefColor = Vcol;
+                DefaultColor = Vcol;
                 DefaultColorView.Fill.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnim);
                 if (CheckBoxAutoSelectColor.IsChecked ?? false) GenAutoColor(Vcol);
             }
@@ -157,25 +179,32 @@ namespace ScheduleChangesItems.Windows
         /// <summary>
         /// Присвоить цвет выделеного состояния параметру
         /// </summary>
-        private void SetColorSelect()
+        /// <param name="StartColor">Стартовый цвет</param>
+        /// <returns>Изменился цвет или нет</returns>
+        private bool SetColorSelect(System.Drawing.Color StartColor)
         {
-            System.Drawing.Color? color = ColorInDialogGen();
+            System.Drawing.Color? color = ColorInDialogGen(StartColor);
             if (color.HasValue)
             {
                 System.Drawing.Color Vcol = color.Value;
-                ColorAnim.To = System.Windows.Media.Color.FromArgb(Vcol.A, Vcol.R, Vcol.G, Vcol.B);
-                SelColor = Vcol;
+                ColorAnim.To = System.Windows.Media.Color.FromRgb(Vcol.R, Vcol.G, Vcol.B);
+                SelectColor = Vcol;
                 SelectColorView.Fill.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnim);
             }
+            return color.HasValue;
         }
 
         /// <summary>
         /// Узнать цвет с помощью диалогового окна
         /// </summary>
+        /// <param name="StartColorDialog">Стартовый цвет в диалоговом окне</param>
         /// <returns>Возможный цвет</returns>
-        private System.Drawing.Color? ColorInDialogGen()
+        private System.Drawing.Color? ColorInDialogGen(System.Drawing.Color StartColorDialog)
         {
-            ColorDialog dialog = new ColorDialog();
+            ColorDialog dialog = new ColorDialog
+            {
+                Color = StartColorDialog
+            };
             DialogResult result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK || result == System.Windows.Forms.DialogResult.Yes) return dialog.Color;
             return null;

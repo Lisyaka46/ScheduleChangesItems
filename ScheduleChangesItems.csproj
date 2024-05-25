@@ -92,11 +92,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DialogAddSeries.xaml">
+    <Page Include="Windows\DialogManagementSeries.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DialogAddPoint.xaml">
+    <Page Include="Windows\DialogManagementPoint.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -118,11 +118,11 @@
     <Compile Include="GUI\ImageButton.xaml.cs">
       <DependentUpon>ImageButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DialogAddSeries.xaml.cs">
-      <DependentUpon>DialogAddSeries.xaml</DependentUpon>
+    <Compile Include="Windows\DialogManagementSeries.xaml.cs">
+      <DependentUpon>DialogManagementSeries.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DialogAddPoint.xaml.cs">
-      <DependentUpon>DialogAddPoint.xaml</DependentUpon>
+    <Compile Include="Windows\DialogManagementPoint.xaml.cs">
+      <DependentUpon>DialogManagementPoint.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DialogDeveloper.xaml.cs">
       <DependentUpon>DialogDeveloper.xaml</DependentUpon>
@@ -192,6 +192,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Windows\OpenFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Dot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\DotChange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\ChartChange.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

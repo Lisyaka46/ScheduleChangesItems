@@ -12,7 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="18*" MaxHeight="40"/>
             <RowDefinition Height="143*"/>
-            <RowDefinition Height="45*" MaxHeight="140"/>
+            <RowDefinition Height="46*" MaxHeight="140"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
@@ -68,18 +68,21 @@
         </Border>
         <Grid Grid.Row="2" Margin="1,1,1,1" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20*"/>
+                <RowDefinition Height="21*"/>
                 <RowDefinition Height="21*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="134*"/>
-                <ColumnDefinition Width="135*"/>
+                <ColumnDefinition Width="93*"/>
+                <ColumnDefinition Width="93*"/>
+                <ColumnDefinition Width="93*"/>
             </Grid.ColumnDefinitions>
-            <GUI:ImageButton x:Name="ButtonRemovePoint" CornerRadius="4,4,4,4" Margin="9,2,9,2" MouseBackground="#FFED9595" Imaging="/Windows/DotDel.png" ButtonBackground="White" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFE66767" ImageMargin="2,0,2,0"/>
-            <GUI:ImageButton x:Name="ButtonAddNewPoint" Margin="9,2,9,2" Grid.Row="1" CornerRadius="4,4,4,4" Imaging="/Windows/DotAdd.png" ButtonBackground="White" MouseBackground="#FFEDECBD" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFD4D395" ImageMargin="2,0,2,0"/>
-            <GUI:ImageButton x:Name="ButtonAddNewSeries" Grid.Column="1" Grid.Row="1" Margin="9,2,9,2" ButtonBackground="White" Imaging="/Windows/ChartAdd.png" CornerRadius="4,4,4,4" MouseBackground="#FFEDECBD" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFD4D395" ImageMargin="2,0,2,0"/>
-            <GUI:ImageButton x:Name="ButtonRemoveSeries" Grid.Column="1" Margin="9,2,9,2" ButtonBackground="White" MouseBackground="#FFED9595" Imaging="/Windows/ChartDel.png" MillisecondsAnimation="80" CornerRadius="4,4,4,4" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFE66767" ImageMargin="2,0,2,0"/>
+            <GUI:ImageButton x:Name="ButtonRemovePoint" CornerRadius="4,4,4,4" Margin="9,2,9,2" MouseBackground="#FFED9595" Imaging="/Windows/DotDel.png" ButtonBackground="White" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFE66767" ImageMargin="2,0,2,0" Grid.Column="2"/>
+            <GUI:ImageButton x:Name="ButtonAddNewPoint" Margin="9,2,9,2" CornerRadius="4,4,4,4" Imaging="/Windows/DotAdd.png" ButtonBackground="White" MouseBackground="#FFEDECBD" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFD4D395" ImageMargin="2,0,2,0"/>
+            <GUI:ImageButton x:Name="ButtonAddNewSeries" Grid.Row="1" Margin="9,2,9,2" ButtonBackground="White" Imaging="/Windows/ChartAdd.png" CornerRadius="4,4,4,4" MouseBackground="#FFEDECBD" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFD4D395" ImageMargin="2,0,2,0"/>
+            <GUI:ImageButton x:Name="ButtonRemoveSeries" Grid.Column="2" Margin="9,2,9,2" ButtonBackground="White" MouseBackground="#FFED9595" Imaging="/Windows/ChartDel.png" MillisecondsAnimation="80" CornerRadius="4,4,4,4" DisabledBackground="#FFA97B7B" IsEnabled="False" ClickedBackground="#FFE66767" ImageMargin="2,0,2,0" Grid.Row="1"/>
+            <GUI:ImageButton x:Name="ButtonChangePoint" CornerRadius="4,4,4,4" Margin="9,2,9,2" MouseBackground="#FF82B4D4" Imaging="/Windows/DotChange.png" ButtonBackground="White" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" ClickedBackground="#FF3890C8" ImageMargin="2,0,2,0" Grid.Column="1" IsEnabled="False"/>
+            <GUI:ImageButton x:Name="ButtonChangeSeries" Grid.Row="1" Margin="9,2,9,2" ButtonBackground="White" Imaging="/Windows/ChartChange.png" CornerRadius="4,4,4,4" MouseBackground="#FF82B4D4" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" ClickedBackground="#FF3890C8" ImageMargin="2,0,2,0" Grid.Column="1" IsEnabled="False"/>
         </Grid>
-        <TextBlock Grid.Column="1" Text="0.3.3a" VerticalAlignment="Center" FontFamily="Cascadia Mono SemiBold" FontSize="13" FontWeight="Medium" FontStyle="Italic" FontStretch="Medium" Margin="0,0,10,0" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="1" Text="0.3.3.5a" VerticalAlignment="Center" FontFamily="Cascadia Mono SemiBold" FontSize="13" FontWeight="Medium" FontStyle="Italic" FontStretch="Medium" Margin="0,0,10,0" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

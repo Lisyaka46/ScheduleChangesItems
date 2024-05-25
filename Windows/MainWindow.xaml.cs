@@ -23,6 +23,11 @@ namespace ScheduleChangesItems
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Количество отображаемых значений тенденции
+        /// </summary>
+        private int CountPrintingTrend = 9;
+
 
         /// <summary>
         /// Файл с которым работает программа
@@ -133,11 +138,30 @@ namespace ScheduleChangesItems
             ListPointsBox.SelectionChanged += (sender, e) =>
             {
                 if (ListPointsBox.SelectedIndex == -1) return;
+                if (ListPointsBox.SelectedIndex > (CountPrintingTrend - 1) / 2)
+                {
+                    if (ListPointsBox.SelectedIndex < ListPointsBox.Items.Count - (CountPrintingTrend - 1) / 2)
+                    {
+                        ChartPoint.ChartAreas[0].AxisX.Minimum = ListPointsBox.SelectedIndex - (CountPrintingTrend - 1) / 2;
+                        ChartPoint.ChartAreas[0].AxisX.Maximum = ListPointsBox.SelectedIndex + 1 + (CountPrintingTrend - 1) / 2;
+                    }
+                    else
+                    {
+                        ChartPoint.ChartAreas[0].AxisX.Maximum = ListPointsBox.Items.Count + 1;
+                        ChartPoint.ChartAreas[0].AxisX.Minimum = ListPointsBox.Items.Count - (CountPrintingTrend - 1);
+                    }
+                }
+                else
+                {
+                    ChartPoint.ChartAreas[0].AxisX.Minimum = 0;
+                    ChartPoint.ChartAreas[0].AxisX.Maximum = CountPrintingTrend;
+                }
                 if (SelectedIndexPoint[SelectedIndexSeries] != -1 && SelectedIndexPoint[SelectedIndexSeries] < ChartPoint.Series[SelectedIndexSeries].Points.Count)
                     ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]].Color = DefaultColorPointSeries;
                 SelectedIndexPoint[SelectedIndexSeries] = ListPointsBox.SelectedIndex;
                 if (SelectedIndexPoint[SelectedIndexSeries] != -1)
                     ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]].Color = SelectedColorPointSeries;
+                UpdateLimitChating();
                 _ = UpdateInformation();
             };
             ListSeriesesBox.SelectionChanged += (sender, e) =>
@@ -147,8 +171,8 @@ namespace ScheduleChangesItems
             };
             ButtonAddNewPoint.MouseUp += (sender, e) =>
             {
-                DialogAddPoint addPoint = new DialogAddPoint();
-                (string, int)? point = addPoint.GenerateTPoint();
+                DialogManagementPoint MPoint = new DialogManagementPoint();
+                (string, int)? point = MPoint.GenerateTPoint();
                 if (point != null)
                 {
                     ListPointsBox.Items.Add(point.Value.Item2);
@@ -156,14 +180,31 @@ namespace ScheduleChangesItems
                     ChartPoint.Series[SelectedIndexSeries].Points.AddY(point.Value.Item2);
                     ChartPoint.Series[SelectedIndexSeries].Points[ChartPoint.Series[SelectedIndexSeries].Points.Count - 1].AxisLabel = point.Value.Item1;
                     ListPointsBox.SelectedIndex++;
-                    if (!ButtonRemovePoint.IsEnabled) ButtonRemovePoint.IsEnabled = true;
-                    UpdateLimitChating();
-                    _ = UpdateInformation();
+                    if (!ButtonRemovePoint.IsEnabled)
+                    {
+                        ButtonRemovePoint.IsEnabled = true;
+                        ButtonChangePoint.IsEnabled = true;
+                    }
+                }
+            };
+            ButtonChangePoint.MouseUp += (sender, e) =>
+            {
+                double X = ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]].XValue;
+                DialogManagementPoint MPoint = new DialogManagementPoint();
+                (string, int)? point = MPoint.ChangeInfoPoint(ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]]);
+                if (point.HasValue)
+                {
+                    ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]] = new DataPoint(X, point.Value.Item2)
+                    {
+                        AxisLabel = point.Value.Item1
+                    };
+                    ListPointsBox.Items[SelectedIndexPoint[SelectedIndexSeries]] = point.Value.Item2;
+                    ListPointsBox.SelectedIndex = ListPointsBox.Items.Count - 1;
                 }
             };
             ButtonSaveFile.MouseUp += (sender, e) =>
             {
-                string SeriesesTaging = TSeriesTagging(ChartPoint.Series);
+                string SeriesesTaging = SeriesTagging(ChartPoint.Series);
                 File.WriteAllText(DirectoryJobFile, SeriesesTaging);
                 DirectoryJobFile = null;
                 ListSeriesesBox.SelectedIndex = -1;
@@ -182,7 +223,9 @@ namespace ScheduleChangesItems
                 ButtonSaveFile.IsEnabled = false;
                 ButtonAddNewPoint.IsEnabled = false;
                 ButtonRemovePoint.IsEnabled = false;
+                ButtonChangePoint.IsEnabled = false;
                 ButtonAddNewSeries.IsEnabled = false;
+                ButtonChangeSeries.IsEnabled = false;
                 ButtonRemoveSeries.IsEnabled = false;
             };
             ButtonRemovePoint.MouseUp += (sender, e) =>
@@ -201,24 +244,44 @@ namespace ScheduleChangesItems
                         ListPointsBox.SelectedIndex = -1;
                         SelectedIndexPoint[SelectedIndexSeries] = -1;
                         ButtonRemovePoint.IsEnabled = false;
+                        ButtonChangePoint.IsEnabled = false;
                     }
                     UpdateLimitChating();
                 }
             };
             ButtonAddNewSeries.MouseUp += (sender, e) =>
             {
-                DialogAddSeries dialogAddSeries = new DialogAddSeries();
-                (Series, VisualizationSeries)? s = dialogAddSeries.GenSeries(ChartPoint.Series.Select((i) => i.Name).ToArray());
+                DialogManagementSeries dialogSeries = new DialogManagementSeries();
+                (Series, VisualizationSeries)? s = dialogSeries.GenSeries(ChartPoint.Series.Select((i) => i.Name).ToArray());
                 if (s.HasValue)
                 {
                     ButtonAddNewPoint.IsEnabled = true;
                     ButtonRemoveSeries.IsEnabled = true;
+                    ButtonChangeSeries.IsEnabled = true;
                     VisCollection.Add(s.Value.Item2);
                     ChartPoint.Series.Add(s.Value.Item1);
                     ListSeriesesBox.Items.Add(s.Value.Item1.Name);
                     SelectedIndexPoint.Add(-1);
                     ListSeriesesBox.SelectedIndex = ListSeriesesBox.Items.Count - 1;
                     //UpdateChartPoint(ListSeriesesBox.Items.Count - 1);
+                }
+            };
+            ButtonChangeSeries.MouseUp += (sender, e) =>
+            {
+                string NameSeries = ListSeriesesBox.Items[SelectedIndexSeries].ToString();
+                DialogManagementSeries dialogSeries = new DialogManagementSeries();
+                (string, VisualizationSeries)? SeriesChangeInfo =
+                    dialogSeries.ChangeInfoSeries(
+                        ChartPoint.Series.Select((i) => i.Name).Where((i) => !i.Equals(NameSeries)).ToArray(), NameSeries, VisCollection[SelectedIndexSeries]);
+                if (SeriesChangeInfo.HasValue)
+                {
+                    VisCollection[SelectedIndexSeries] = SeriesChangeInfo.Value.Item2;
+                    ChartPoint.Series[SelectedIndexSeries].Name = SeriesChangeInfo.Value.Item1;
+                    ChartPoint.Series[SelectedIndexSeries].Color = VisCollection[SelectedIndexSeries].ColorDefault;
+                    ChartPoint.Update();
+                    int index = SelectedIndexSeries;
+                    ListSeriesesBox.Items[SelectedIndexSeries] = SeriesChangeInfo.Value.Item1;
+                    ListSeriesesBox.SelectedIndex = index;
                 }
             };
             ButtonRemoveSeries.MouseUp += (sender, e) =>
@@ -238,7 +301,9 @@ namespace ScheduleChangesItems
                         ListSeriesesBox.SelectedIndex = -1;
                         SelectedIndexSeries = -1;
                         ButtonRemoveSeries.IsEnabled = false;
+                        ButtonChangeSeries.IsEnabled = false;
                         ButtonRemovePoint.IsEnabled = false;
+                        ButtonChangePoint.IsEnabled = false;
                         ButtonAddNewPoint.IsEnabled = false;
                     }
                 }
@@ -246,11 +311,11 @@ namespace ScheduleChangesItems
         }
 
         /// <summary>
-        /// Конвертировать объект TSepies в синтаксис тегов
+        /// Конвертировать объект Series в синтаксис тегов
         /// </summary>
         /// <param name="MassSeries">Объекты коллекции</param>
         /// <returns>Синтаксис тегов</returns>
-        private string TSeriesTagging(SeriesCollection MassSeries)
+        private string SeriesTagging(SeriesCollection MassSeries)
         {
             if (MassSeries == null) return string.Empty;
             string Text = string.Empty;
@@ -318,6 +383,7 @@ namespace ScheduleChangesItems
             {
                 ButtonAddNewPoint.IsEnabled = true;
                 ButtonRemoveSeries.IsEnabled = true;
+                ButtonChangeSeries.IsEnabled = true;
             }
             ButtonAddNewSeries.IsEnabled = true;
             ButtonSaveFile.IsEnabled = true;
@@ -353,6 +419,7 @@ namespace ScheduleChangesItems
             ListPointsBox.SelectedIndex = SelectedIndexPoint[index];
             UpdateLimitChating();
             ButtonRemovePoint.IsEnabled = s.Points.Count > 0;
+            ButtonChangePoint.IsEnabled = s.Points.Count > 0;
             await Task.FromResult(UpdateInformation());
         }
 
@@ -360,13 +427,17 @@ namespace ScheduleChangesItems
         {
             if (ChartPoint.Series[SelectedIndexSeries].Points.Count > 0)
             {
-                double Max = ChartPoint.Series[SelectedIndexSeries].Points.Max((i) => i.YValues[0]) * 1.1;
-                double Min = ChartPoint.Series[SelectedIndexSeries].Points.Min((i) => i.YValues[0]) * 1.1;
+                List<double> Points = new List<double>();
+                for (int i = ChartPoint.ChartAreas[0].AxisX.Minimum > 0d ? (int)ChartPoint.ChartAreas[0].AxisX.Minimum - 1 : 0;
+                    i < ChartPoint.ChartAreas[0].AxisX.Maximum - 1 && i < ChartPoint.Series[SelectedIndexSeries].Points.Count; i++)
+                    Points.Add(ChartPoint.Series[SelectedIndexSeries].Points[i].YValues[0]);
+                double Max = Points.Max() * 1.6;
+                double Min = Points.Min() * 1.6;
                 if (Math.Abs(Min) + Max == 0) return;
                 ChartPoint.ChartAreas[0].AxisY.Maximum = Max;
                 if (Min < 0) ChartPoint.ChartAreas[0].AxisY.Minimum = Min;
                 else ChartPoint.ChartAreas[0].AxisY.Minimum = 0;
-                ChartPoint.ChartAreas[0].AxisY.Interval = Math.Round((Math.Abs(Min) + Max) / 6, 2);
+                ChartPoint.ChartAreas[0].AxisY.Interval = Math.Round((Math.Abs(Min) + Max) / 12, 2);
             }
         }
 
