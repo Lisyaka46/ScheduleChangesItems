@@ -39,10 +39,10 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="TextAllGive" TextWrapping="Wrap" Text="Всего было создано: ?" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left"/>
                 <TextBlock x:Name="TextAllRemove" TextWrapping="Wrap" Text="Всего было использовано: ?" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Row="1"/>
-                <TextBlock x:Name="TextAllTrend" TextWrapping="Wrap" Text="Тенденция относительно начального значения: ?%" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Column="1"/>
-                <TextBlock x:Name="TextTrend" TextWrapping="Wrap" Text="Тенденция относительно предыдущего значения: ?%" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"/>
-                <TextBlock x:Name="Text" TextWrapping="Wrap" Text="???: ?" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Row="2"/>
-                <TextBlock x:Name="TextAllTrendChange" TextWrapping="Wrap" Text="Общий процент изменения тенденции: ?%" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"/>
+                <TextBlock x:Name="TextMaxProcent" TextWrapping="Wrap" Text="Значение относительно максимума: ?%" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"/>
+                <TextBlock x:Name="TextTrend" TextWrapping="Wrap" Text="Тенденция относительно предыдущего значения: ?%" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Column="1"/>
+                <TextBlock x:Name="TextMinProcent" TextWrapping="Wrap" Text="Значение относительно минимума: ?%" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Row="2"/>
+                <TextBlock x:Name="TextAllTrendChange" TextWrapping="Wrap" Text="Общий процент изменения тенденции: ?%" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"/>
             </Grid>
         </Border>
         <Grid>
@@ -59,11 +59,13 @@
         <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="1" CornerRadius="10,10,10,10" Margin="2,2,2,2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="197*"/>
-                    <RowDefinition Height="161*"/>
+                    <RowDefinition Height="129*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="129*"/>
                 </Grid.RowDefinitions>
-                <ListBox x:Name="ListPointsBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="3,3,3,3" Grid.Row="1" BorderBrush="Black" BorderThickness="0,1,0,0"/>
+                <ListBox x:Name="ListPointsBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="3,3,3,3" Grid.Row="2" BorderBrush="Black" BorderThickness="0,1,0,0"/>
                 <ListBox x:Name="ListSeriesesBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="3,3,3,3" BorderThickness="0,0,0,1" BorderBrush="Black"/>
+                <TextBlock x:Name="TextStatusPoint" HorizontalAlignment="Left" Margin="3,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Максимальное значение" VerticalAlignment="Center" Foreground="Black"/>
             </Grid>
         </Border>
         <Grid Grid.Row="2" Margin="1,1,1,1" Grid.Column="1">
