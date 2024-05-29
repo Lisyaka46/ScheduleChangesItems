@@ -88,6 +88,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Windows\Frames\Settings\PageGeneralSettings.xaml.cs">
+      <DependentUpon>PageGeneralSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WindowSettings.xaml.cs">
+      <DependentUpon>WindowSettings.xaml</DependentUpon>
+    </Compile>
     <Page Include="GUI\ImageButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +137,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\Frames\Settings\PageGeneralSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WindowSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -201,6 +215,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Windows\ChartChange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\icons8-настройки-96.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

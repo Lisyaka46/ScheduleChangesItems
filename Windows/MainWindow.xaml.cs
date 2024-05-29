@@ -308,6 +308,11 @@ namespace ScheduleChangesItems
                     }
                 }
             };
+            ButtonSettings.MouseUp += (sender, e) =>
+            {
+                WindowSettings settings = new WindowSettings();
+                settings.ShowDialog();
+            };
         }
 
         /// <summary>
