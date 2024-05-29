@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Navigation;
+using System.Windows.Media.Animation;
 
 namespace ScheduleChangesItems
 {
@@ -65,6 +66,11 @@ namespace ScheduleChangesItems
         private List<VisualizationSeries> VisCollection;
 
         /// <summary>
+        /// Манимация для состояния позиции тенденции
+        /// </summary>
+        private readonly ColorAnimation AnimStatusPoint;
+
+        /// <summary>
         /// Удаление карты
         /// </summary>
         /// <param name="hObject">DeleteObject</param>
@@ -95,8 +101,10 @@ namespace ScheduleChangesItems
         public MainWindow()
         {
             InitializeComponent();
+            AnimStatusPoint = new ColorAnimation(Colors.White, Colors.Black, TimeSpan.FromMilliseconds(600));
             Title = TitleValue;
             ChartPoint.ChartAreas[0].AxisY.Minimum = 0d;
+            TextStatusPoint.Foreground = new SolidColorBrush(Colors.Black);
             ButtonDeveloper.Click += (sender, e) =>
             {
                 DialogDeveloper dialogDeveloper = new DialogDeveloper();
@@ -214,7 +222,8 @@ namespace ScheduleChangesItems
                 ChartPoint.Series.Clear();
                 TextAllGive.Text = $"Всего было создано: ?";
                 TextAllRemove.Text = $"Всего было использовано: ?";
-                TextAllTrend.Text = "Тенденция относительно начального значения: ?%";
+                TextMinProcent.Text = "Значение относительно минимума: ?%";
+                TextMaxProcent.Text = "Значение относительно максимума: ?%";
                 TextTrend.Text = "Тенденция относительно предыдущего значения: ?%";
                 TextAllTrendChange.Text = $"Общий процент изменения тенденции: ?%";
 
@@ -451,6 +460,7 @@ namespace ScheduleChangesItems
             Series s = ChartPoint.Series[SelectedIndexSeries];
             int index = SelectedIndexPoint[SelectedIndexSeries];
             double ActNum = s.Points[index].YValues[0];
+            double[] Points = s.Points.Select((i) => i.YValues[0]).ToArray();
             double Consumption = await Task.Run(() =>
             {
                 double x = 0d;
@@ -463,13 +473,15 @@ namespace ScheduleChangesItems
                 }
                 return x;
             });
-            int Trend, TrendChange = 0;
+            double Trend;
+            double TrendChange = 0d;
 
             if (index - 1 > -1) Trend =
-                    (int)await MathTrend(s.Points[index - 1].YValues[0], ActNum);
-            else if (ActNum < 0) Trend = -100;
-            else Trend = 100;
-            int AllTrend = (int)await MathTrend(s.Points[0].YValues[0], ActNum);
+                    await MathTrend(s.Points[index - 1].YValues[0], ActNum);
+            else if (ActNum < 0) Trend = -1d;
+            else Trend = 1d;
+            double TrendMax = await MathTrend(Points.Max(), ActNum);
+            double TrendMin = await MathTrend(Points.Min(), ActNum);
 
             if (index > 0)
             {
@@ -486,17 +498,38 @@ namespace ScheduleChangesItems
                         if (func.Invoke(Num, s.Points[i].YValues[0])) Num = s.Points[i].YValues[0];
                         else break;
                     }
-                    TrendChange = (int)await MathTrend(Num, ActNum);
+                    TrendChange = await MathTrend(Num, ActNum);
                 }
             }
-            else TrendChange = Trend;
+            else TrendChange = (int)Trend;
 
             TextAllGive.Text = $"Всего было создано: {s.Points.Sum((i) => i.YValues[0])}";
             TextAllRemove.Text = $"Всего было использовано: {Consumption}";
-            TextAllTrend.Text = $"Тенденция относительно начального значения: {AllTrend}%";
-            TextTrend.Text = $"Тенденция относительно предыдущего значения: {Trend}%";
-            TextAllTrendChange.Text = $"Общий процент изменения тенденции: {TrendChange}%";
+            TextMinProcent.Text = $"Значение относительно минимума: {GenStringProcent(TrendMin)}";
+            TextMaxProcent.Text = $"Значение относительно максимума: {GenStringProcent(TrendMax)}";
+            TextTrend.Text = $"Тенденция относительно предыдущего значения: {GenStringProcent(Trend)}";
+            TextAllTrendChange.Text = $"Общий процент изменения тенденции: {GenStringProcent(TrendChange)}";
+            if (ActNum == Points.Max()) TextStatusPoint.Text = "Максимальное значение";
+            else if (ActNum == Points.Min()) TextStatusPoint.Text = "Минимальное значение";
+            else
+            {
+                TextStatusPoint.Text = "Промежуточное значение";
+                return;
+            }
+            TextStatusPoint.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, AnimStatusPoint);
         }
+
+        /// <summary>
+        /// Сгенерировать строку отображаемого процента
+        /// </summary>
+        /// <remarks>
+        /// (0,01 => +1%) *** (0,001 => +<![CDATA[<]]>0%) *** (-0,01 => -1%) *** (-0,001 => -<![CDATA[<]]>0%)
+        /// </remarks>
+        /// <param name="Procent">Вычисленный процент</param>
+        /// <returns>Строка отображаемая процент</returns>
+        private string GenStringProcent(double Procent) =>
+            $"{(Procent > 0 ? "+" : string.Empty)}" +
+            $"{(Math.Abs(Procent) >= 0.01d ? $"{(int)(Procent * 100)}%" : Math.Abs(Procent) > 0 ? "<0%" : "0%")}";
 
         /// <summary>
         /// Вычислить процентное соотношение между двумя числами
@@ -512,11 +545,11 @@ namespace ScheduleChangesItems
                 if (Difference == 0) return 0d;
                 else if (PreNum == 0)
                 {
-                    if (ActNum < 0) return -100d;
-                    else return 100d;
+                    if (ActNum < 0) return -1d;
+                    else return 1d;
                 }
-                else if (ActNum < 0 && PreNum < 0 || ActNum > 0 && PreNum < 0) return -(Difference / PreNum * 100d);
-                else return Difference / PreNum * 100d;
+                else if (ActNum < 0 && PreNum < 0 || ActNum > 0 && PreNum < 0) return -(Difference / PreNum);
+                else return Difference / PreNum;
             });
         }
     }
