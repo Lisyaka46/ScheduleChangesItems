@@ -178,7 +178,7 @@ namespace ScheduleChangesItems.Classes
 
             private uint _Num;
 
-            public string Message => $"{_Message}\nОшибка #{_Num}";
+            public string Message => $"{_Message}\nОшибка E{_Num}";
 
             public uint Num => _Num;
 
@@ -203,7 +203,7 @@ namespace ScheduleChangesItems.Classes
 
             public static Error E6(string TagName) => Create($"Невозможно создать новый элемент по тегу <{TagName}> так как он уже создан.", 6u);
 
-            public static Error E7() => Create("Невозможно инициализировать новую коллекцию не деинсталировав уже инициализированую.", 7u);
+            public static Error E7() => Create("Невозможно инициализировать новую коллекцию не деинсталлировав уже инициализированую.", 7u);
         }
     }
 }

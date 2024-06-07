@@ -36,7 +36,7 @@ namespace ScheduleChangesItems
         private string DirectoryJobFile = null;
 
         /// <summary>
-        /// Константное название программы
+        /// Константное название главного окна при старте программы
         /// </summary>
         private const string TitleValue = "Program Thend";
 
@@ -69,30 +69,6 @@ namespace ScheduleChangesItems
         /// Манимация для состояния позиции тенденции
         /// </summary>
         private readonly ColorAnimation AnimStatusPoint;
-
-        /// <summary>
-        /// Удаление карты
-        /// </summary>
-        /// <param name="hObject">DeleteObject</param>
-        /// <returns></returns>
-        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool DeleteObject([In] IntPtr hObject);
-
-        /// <summary>
-        /// Конвертация из карты цвета в ImageSource
-        /// </summary>
-        /// <param name="bmp">Карта цвета</param>
-        /// <returns>ImageSource</returns>
-        public ImageSource ImageSourceFromBitmap(Bitmap bmp)
-        {
-            var handle = bmp.GetHbitmap();
-            try
-            {
-                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally { DeleteObject(handle); }
-        }
 
 
         /// <summary>

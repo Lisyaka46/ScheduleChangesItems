@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,10 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.Integration;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Xaml;
+using ScheduleChangesItems.Windows.Frames.Settings;
 
 namespace ScheduleChangesItems.Windows
 {
@@ -25,11 +29,10 @@ namespace ScheduleChangesItems.Windows
         public WindowSettings()
         {
             InitializeComponent();
-            GeneralSettings.Click += (sender, e) =>
+            ButtonGeneralSettings.MouseUp += (sender, e) =>
             {
-                GeneralSettings.Content = "dfn";
-                FrameSettings.Navigate(new Uri("/Windows/Frames/Settings/PageGeneralSettings.xaml"));
-                FrameSettings.Refresh();
+                FrameSettings = null;
+                FrameSettings.Navigate(new PageGeneralSettings());
             };
         }
     }

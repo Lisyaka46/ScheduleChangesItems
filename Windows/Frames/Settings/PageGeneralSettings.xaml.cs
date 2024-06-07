@@ -13,15 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ScheduleChangesItems.Windows
+namespace ScheduleChangesItems.Windows.Frames.Settings
 {
     /// <summary>
-    /// Логика взаимодействия для Page1.xaml
+    /// Логика взаимодействия для PageGeneralSettings.xaml
     /// </summary>
     public partial class PageGeneralSettings : Page
     {
         /// <summary>
-        /// Страница общих настроек программы
+        /// Страница <b>общих</b> настроек программы
         /// </summary>
         public PageGeneralSettings()
         {

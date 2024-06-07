@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="ScheduleChangesItems.GUI.TextButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ScheduleChangesItems.GUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="62.942" d:DesignWidth="177.319">
+    <Grid>
+        <Border x:Name="ButtonBorder" BorderThickness="1" CornerRadius="10,10,10,10" BorderBrush="Black">
+            <TextBlock x:Name="ButtonMainText" Margin="10,10,10,10" TextAlignment="Center" VerticalAlignment="Center" FontSize="11">Text
+            </TextBlock>
+        </Border>
+
+    </Grid>
+</UserControl>

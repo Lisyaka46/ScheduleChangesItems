@@ -20,7 +20,7 @@ namespace ScheduleChangesItems.GUI
     /// <summary>
     /// Логика взаимодействия для ImageButton.xaml
     /// </summary>
-    public partial class ImageButton : UserControl
+    public partial class TextButton : UserControl
     {
         private Brush _Background;
         /// <summary>
@@ -103,20 +103,20 @@ namespace ScheduleChangesItems.GUI
             }
         }
 
-        private ImageSource _Imaging;
+        private string _Texting;
         /// <summary>
-        /// Изображение которое отображается в кнопке
+        /// Текст который отображается в кнопке
         /// </summary>
-        public ImageSource Imaging
+        public string Texting
         {
             get
             {
-                return _Imaging;
+                return _Texting;
             }
             set
             {
-                ButtonImage.Source = value;
-                _Imaging = value;
+                ButtonMainText.Text = value;
+                _Texting = value;
             }
         }
 
@@ -174,26 +174,41 @@ namespace ScheduleChangesItems.GUI
         /// <summary>
         /// Позиционирование картинки в кнопке
         /// </summary>
-        public Thickness ImageMargin
+        public Thickness TextMargin
         {
             get
             {
-                return ButtonImage.Margin;
+                return ButtonMainText.Margin;
             }
             set
             {
-                ButtonImage.Margin = value;
+                ButtonMainText.Margin = value;
             }
         }
 
+        /// <summary>
+        /// Размер шрифта текста в кнопке
+        /// </summary>
+        public new double FontSize
+        {
+            get
+            {
+                return ButtonMainText.FontSize;
+            }
+            set
+            {
+                ButtonMainText.FontSize = value;
+            }
+        }
 
         /// <summary>
         /// Инициализировать объект кнопки с изображением
         /// </summary>
-        public ImageButton()
+        public TextButton()
         {
             InitializeComponent();
-            ButtonImage.Margin = new Thickness(10, 10, 10, 10);
+            ButtonMainText.FontSize = 12d;
+            ButtonMainText.Margin = new Thickness(10, 10, 10, 10);
             ClickedBackground = Colors.LightGray;
             DisabledBackground = Colors.Gray;
             MillisecondsAnimation = 0d;
