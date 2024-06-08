@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using ScheduleChangesItems.Classes;
 
 namespace ScheduleChangesItems
 {
@@ -14,5 +15,9 @@ namespace ScheduleChangesItems
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Объект настроек программы
+        /// </summary>
+        public static ObjectSettings Setting { get; } = new ObjectSettings();
     }
 }

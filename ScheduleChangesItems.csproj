@@ -88,10 +88,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\ObjectSettings.cs" />
     <Compile Include="GUI\TextButton.xaml.cs">
       <DependentUpon>TextButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Frames\Settings\PageGeneralSettings.xaml.cs">
+    <Compile Include="Windows\Pages\Settings\PageGeneralSettings.xaml.cs">
       <DependentUpon>PageGeneralSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\WindowSettings.xaml.cs">
@@ -117,7 +118,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\Frames\Settings\PageGeneralSettings.xaml">
+    <Page Include="Windows\Pages\Settings\PageGeneralSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -13,11 +13,8 @@
             <ColumnDefinition Width="633*"/>
         </Grid.ColumnDefinitions>
         <Grid>
-            <TreeView Margin="3,3,0,3" BorderThickness="0,0,0,0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="-15,2,0,0" HorizontalAlignment="Left">
-                <GUI:TextButton x:Name="ButtonGeneralSettings" ButtonBackground="White" CornerRadius="4,4,4,4" HorizontalAlignment="Center" MillisecondsAnimation="80" TextMargin="5,3,5,3" Texting="Общие" DisabledBackground="#FFA97B7B" MouseBackground="#FF5DC3B7" ClickedBackground="#FF6FCAD6"/>
-
-            </TreeView>
-            <Rectangle Stroke="Black" RadiusX="8" StrokeThickness="3" RadiusY="8"/>
+            <GUI:TextButton x:Name="ButtonGeneralSettings" ButtonBackground="White" CornerRadius="9,9,9,9" MillisecondsAnimation="80" TextMargin="5,3,5,3" Texting="Общие" DisabledBackground="#FFA97B7B" MouseBackground="#FF6FCAD6" ClickedBackground="#FF5CA2AB" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="4,7,0,0" Panel.ZIndex="1"/>
+            <Rectangle Stroke="Black" StrokeThickness="2" RadiusX="1" RadiusY="8" Margin="-3,0,0,0"/>
         </Grid>
         <Frame x:Name="FrameSettings" Grid.Column="1" Focusable="False"/>
 

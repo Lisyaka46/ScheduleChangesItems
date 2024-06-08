@@ -26,6 +26,11 @@ namespace ScheduleChangesItems.Windows.Frames.Settings
         public PageGeneralSettings()
         {
             InitializeComponent();
+            VisiblyMaxMin.IsChecked = App.Setting.VisiblyMax_and_Min;
+            VisiblyMaxMin.Click += (sender, e) =>
+            {
+                App.Setting.VisiblyMax_and_Min = VisiblyMaxMin.IsChecked.Value;
+            };
         }
     }
 }

@@ -24,15 +24,24 @@ namespace ScheduleChangesItems.Windows
     public partial class WindowSettings : Window
     {
         /// <summary>
+        /// Объект данных страницы "Общих" настроек программы
+        /// </summary>
+        private readonly PageGeneralSettings GeneralSettings = new PageGeneralSettings();
+
+        /// <summary>
         /// Окно настроек программы
         /// </summary>
         public WindowSettings()
         {
             InitializeComponent();
+            FrameSettings.Navigate(GeneralSettings);
             ButtonGeneralSettings.MouseUp += (sender, e) =>
             {
-                FrameSettings = null;
-                FrameSettings.Navigate(new PageGeneralSettings());
+                while (FrameSettings.CanGoBack)
+                {
+                    FrameSettings.RemoveBackEntry();
+                }
+                //if (!FrameSettings.CanGoBack) FrameSettings.Navigate(new PageGeneralSettings());
             };
         }
     }

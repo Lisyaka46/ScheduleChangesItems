@@ -63,7 +63,7 @@
                     <RowDefinition Height="20*"/>
                     <RowDefinition Height="129*"/>
                 </Grid.RowDefinitions>
-                <ListBox x:Name="ListPointsBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="3,3,3,3" Grid.Row="2" BorderBrush="Black" BorderThickness="0,1,0,0"/>
+                <ListBox x:Name="ListPointsBox" Margin="3,3,3,3" Grid.Row="2" BorderBrush="Black" BorderThickness="0,1,0,0"/>
                 <ListBox x:Name="ListSeriesesBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="3,3,3,3" BorderThickness="0,0,0,1" BorderBrush="Black"/>
                 <TextBlock x:Name="TextStatusPoint" HorizontalAlignment="Left" Margin="3,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Максимальное значение" VerticalAlignment="Center" Foreground="Black"/>
             </Grid>

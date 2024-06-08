@@ -485,14 +485,17 @@ namespace ScheduleChangesItems
             TextMaxProcent.Text = $"Значение относительно максимума: {GenStringProcent(TrendMax)}";
             TextTrend.Text = $"Тенденция относительно предыдущего значения: {GenStringProcent(Trend)}";
             TextAllTrendChange.Text = $"Общий процент изменения тенденции: {GenStringProcent(TrendChange)}";
-            if (ActNum == Points.Max()) TextStatusPoint.Text = "Максимальное значение";
-            else if (ActNum == Points.Min()) TextStatusPoint.Text = "Минимальное значение";
-            else
+            if (App.Setting.VisiblyMax_and_Min)
             {
-                TextStatusPoint.Text = "Промежуточное значение";
-                return;
+                if (ActNum == Points.Max()) TextStatusPoint.Text = "Максимальное значение";
+                else if (ActNum == Points.Min()) TextStatusPoint.Text = "Минимальное значение";
+                else
+                {
+                    TextStatusPoint.Text = "Промежуточное значение";
+                    return;
+                }
+                TextStatusPoint.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, AnimStatusPoint);
             }
-            TextStatusPoint.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, AnimStatusPoint);
         }
 
         /// <summary>
