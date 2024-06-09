@@ -6,15 +6,18 @@
         xmlns:local="clr-namespace:ScheduleChangesItems.Windows"
         xmlns:GUI="clr-namespace:ScheduleChangesItems.GUI" x:Class="ScheduleChangesItems.Windows.WindowSettings"
         mc:Ignorable="d"
-        Title="WindowSettings" Height="450" Width="800">
+        Title="Настройки SCA" Height="435" Width="635" MinWidth="635" MinHeight="435">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="167*"/>
             <ColumnDefinition Width="633*"/>
         </Grid.ColumnDefinitions>
         <Grid>
-            <GUI:TextButton x:Name="ButtonGeneralSettings" ButtonBackground="White" CornerRadius="9,9,9,9" MillisecondsAnimation="80" TextMargin="5,3,5,3" Texting="Общие" DisabledBackground="#FFA97B7B" MouseBackground="#FF6FCAD6" ClickedBackground="#FF5CA2AB" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="4,7,0,0" Panel.ZIndex="1"/>
-            <Rectangle Stroke="Black" StrokeThickness="2" RadiusX="1" RadiusY="8" Margin="-3,0,0,0"/>
+            <Border BorderBrush="Black" BorderThickness="0,0,4,0">
+                <TextBlock TextWrapping="Wrap" Text="Версия: 0.3.5a" VerticalAlignment="Bottom" FontFamily="Cascadia Mono" FontWeight="Bold" TextAlignment="Center" FontSize="14"/>
+            </Border>
+            <GUI:TextButton x:Name="ButtonGeneralSettings" ButtonBackground="White" CornerRadius="9,9,9,9" MillisecondsAnimation="80" TextMargin="5,3,5,3" Texting="Общие" DisabledBackground="#FFA97B7B" MouseBackground="#FF6FCAD6" ClickedBackground="#FF5CA2AB" VerticalAlignment="Top" Margin="5,5,8,0" Panel.ZIndex="1"/>
+            <GUI:TextButton x:Name="ButtonTextSettings" ButtonBackground="White" CornerRadius="9,9,9,9" MillisecondsAnimation="80" TextMargin="5,3,5,3" Texting="Текст" DisabledBackground="#FFA97B7B" MouseBackground="#FF6FCAD6" ClickedBackground="#FF5CA2AB" VerticalAlignment="Top" Margin="5,35,8,0" Panel.ZIndex="1"/>
         </Grid>
         <Frame x:Name="FrameSettings" Grid.Column="1" Focusable="False"/>
 

@@ -8,7 +8,7 @@
              d:DesignHeight="62.942" d:DesignWidth="177.319">
     <Grid>
         <Border x:Name="ButtonBorder" BorderThickness="1" CornerRadius="10,10,10,10" BorderBrush="Black">
-            <TextBlock x:Name="ButtonMainText" Margin="10,10,10,10" TextAlignment="Center" VerticalAlignment="Center" FontSize="11">Text
+            <TextBlock x:Name="ButtonMainText" Margin="10,10,10,10" TextAlignment="Center" FontSize="11" VerticalAlignment="Center">Text
             </TextBlock>
         </Border>
 

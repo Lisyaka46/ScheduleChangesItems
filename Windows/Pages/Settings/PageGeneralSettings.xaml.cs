@@ -29,7 +29,11 @@ namespace ScheduleChangesItems.Windows.Frames.Settings
             VisiblyMaxMin.IsChecked = App.Setting.VisiblyMax_and_Min;
             VisiblyMaxMin.Click += (sender, e) =>
             {
-                App.Setting.VisiblyMax_and_Min = VisiblyMaxMin.IsChecked.Value;
+                App.Setting.VisiblyMax_and_Min.SetValue(VisiblyMaxMin.IsChecked.Value);
+            };
+            VisiblySizePosition.ValueChanged += (sender, e) =>
+            {
+                App.Setting.CountVisiblePosGraph.SetValue((int)VisiblySizePosition.Value);
             };
         }
     }

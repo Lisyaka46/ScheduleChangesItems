@@ -25,12 +25,6 @@ namespace ScheduleChangesItems
     public partial class MainWindow : Window
     {
         /// <summary>
-        /// Количество отображаемых значений тенденции
-        /// </summary>
-        private int CountPrintingTrend = 9;
-
-
-        /// <summary>
         /// Файл с которым работает программа
         /// </summary>
         private string DirectoryJobFile = null;
@@ -77,6 +71,20 @@ namespace ScheduleChangesItems
         public MainWindow()
         {
             InitializeComponent();
+            App.Setting.VisiblyMax_and_Min.ValueChange += () =>
+            {
+                DoubleAnimation d = new DoubleAnimation()
+                {
+                    To = !App.Setting.VisiblyMax_and_Min ? 0d : 1d,
+                    Duration = TimeSpan.FromMilliseconds(100)
+                };
+                TextStatusPoint.BeginAnimation(OpacityProperty, d);
+            };
+            App.Setting.CountVisiblePosGraph.ValueChange += () =>
+            {
+                UpdatingLimitX();
+                UpdateLimitChating();
+            };
             AnimStatusPoint = new ColorAnimation(Colors.White, Colors.Black, TimeSpan.FromMilliseconds(600));
             Title = TitleValue;
             ChartPoint.ChartAreas[0].AxisY.Minimum = 0d;
@@ -122,24 +130,7 @@ namespace ScheduleChangesItems
             ListPointsBox.SelectionChanged += (sender, e) =>
             {
                 if (ListPointsBox.SelectedIndex == -1) return;
-                if (ListPointsBox.SelectedIndex > (CountPrintingTrend - 1) / 2)
-                {
-                    if (ListPointsBox.SelectedIndex < ListPointsBox.Items.Count - (CountPrintingTrend - 1) / 2)
-                    {
-                        ChartPoint.ChartAreas[0].AxisX.Minimum = ListPointsBox.SelectedIndex - (CountPrintingTrend - 1) / 2;
-                        ChartPoint.ChartAreas[0].AxisX.Maximum = ListPointsBox.SelectedIndex + 1 + (CountPrintingTrend - 1) / 2;
-                    }
-                    else
-                    {
-                        ChartPoint.ChartAreas[0].AxisX.Maximum = ListPointsBox.Items.Count + 1;
-                        ChartPoint.ChartAreas[0].AxisX.Minimum = ListPointsBox.Items.Count - (CountPrintingTrend - 1);
-                    }
-                }
-                else
-                {
-                    ChartPoint.ChartAreas[0].AxisX.Minimum = 0;
-                    ChartPoint.ChartAreas[0].AxisX.Maximum = CountPrintingTrend;
-                }
+                UpdatingLimitX();
                 if (SelectedIndexPoint[SelectedIndexSeries] != -1 && SelectedIndexPoint[SelectedIndexSeries] < ChartPoint.Series[SelectedIndexSeries].Points.Count)
                     ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]].Color = DefaultColorPointSeries;
                 SelectedIndexPoint[SelectedIndexSeries] = ListPointsBox.SelectedIndex;
@@ -196,6 +187,7 @@ namespace ScheduleChangesItems
                 ListSeriesesBox.Items.Clear();
                 ListPointsBox.Items.Clear();
                 ChartPoint.Series.Clear();
+                Title = TitleValue;
                 TextAllGive.Text = $"Всего было создано: ?";
                 TextAllRemove.Text = $"Всего было использовано: ?";
                 TextMinProcent.Text = "Значение относительно минимума: ?%";
@@ -299,6 +291,34 @@ namespace ScheduleChangesItems
                 settings.ShowDialog();
             };
         }
+
+        /// <summary>
+        /// Обновление границ видимости позиций графика
+        /// </summary>
+        private void UpdatingLimitX()
+        {
+            ChartArea area = ChartPoint.ChartAreas[0];
+            int LimitX = App.Setting.CountVisiblePosGraph - 1;
+            if (ListPointsBox.SelectedIndex >= LimitX)
+            {
+                if (ListPointsBox.SelectedIndex < ListPointsBox.Items.Count - LimitX / 2)
+                {
+                    area.AxisX.Minimum = ListPointsBox.SelectedIndex - LimitX / 2;
+                    area.AxisX.Maximum = ListPointsBox.SelectedIndex + 1 + LimitX / 2;
+                }
+                else
+                {
+                    area.AxisX.Minimum = LimitX <= ListPointsBox.Items.Count ? ListPointsBox.Items.Count - LimitX : 0;
+                    area.AxisX.Maximum = ListPointsBox.Items.Count + 1;
+                }
+            }
+            else
+            {
+                area.AxisX.Minimum = 0;
+                area.AxisX.Maximum = App.Setting.CountVisiblePosGraph;
+            }
+        }
+
 
         /// <summary>
         /// Конвертировать объект Series в синтаксис тегов

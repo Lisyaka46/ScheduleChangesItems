@@ -95,6 +95,9 @@
     <Compile Include="Windows\Pages\Settings\PageGeneralSettings.xaml.cs">
       <DependentUpon>PageGeneralSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Pages\Settings\PageTextSettings.xaml.cs">
+      <DependentUpon>PageTextSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\WindowSettings.xaml.cs">
       <DependentUpon>WindowSettings.xaml</DependentUpon>
     </Compile>
@@ -149,6 +152,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\Pages\Settings\PageTextSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\WindowSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

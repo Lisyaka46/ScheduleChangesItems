@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xaml;
 using ScheduleChangesItems.Windows.Frames.Settings;
+using ScheduleChangesItems.Windows.Pages.Settings;
+using System.Windows.Navigation;
 
 namespace ScheduleChangesItems.Windows
 {
@@ -28,19 +30,24 @@ namespace ScheduleChangesItems.Windows
         /// </summary>
         private readonly PageGeneralSettings GeneralSettings = new PageGeneralSettings();
 
+        private readonly PageTextSettings TextSettings = new PageTextSettings();
+
         /// <summary>
         /// Окно настроек программы
         /// </summary>
         public WindowSettings()
         {
             InitializeComponent();
-            FrameSettings.Navigate(GeneralSettings);
+            FrameSettings.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             ButtonGeneralSettings.MouseUp += (sender, e) =>
             {
-                while (FrameSettings.CanGoBack)
-                {
-                    FrameSettings.RemoveBackEntry();
-                }
+                FrameSettings.Navigate(GeneralSettings);
+                //if (!FrameSettings.CanGoBack) FrameSettings.Navigate(new PageGeneralSettings());
+            };
+
+            ButtonTextSettings.MouseUp += (sender, e) =>
+            {
+                FrameSettings.Navigate(TextSettings);
                 //if (!FrameSettings.CanGoBack) FrameSettings.Navigate(new PageGeneralSettings());
             };
         }
