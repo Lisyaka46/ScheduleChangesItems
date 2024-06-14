@@ -34,8 +34,8 @@
                     <RowDefinition Height="29*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="113*"/>
-                    <ColumnDefinition Width="164*"/>
+                    <ColumnDefinition Width="278*"/>
+                    <ColumnDefinition Width="373*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="TextAllGive" TextWrapping="Wrap" Text="Всего было создано: ?" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left"/>
                 <TextBlock x:Name="TextAllRemove" TextWrapping="Wrap" Text="Всего было использовано: ?" VerticalAlignment="Center" Margin="4,0,0,0" HorizontalAlignment="Left" Grid.Row="1"/>
@@ -84,7 +84,7 @@
             <GUI:ImageButton x:Name="ButtonChangePoint" CornerRadius="4,4,4,4" Margin="9,2,9,2" MouseBackground="#FF82B4D4" Imaging="/Windows/DotChange.png" ButtonBackground="White" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" ClickedBackground="#FF3890C8" ImageMargin="2,0,2,0" Grid.Column="1" IsEnabled="False"/>
             <GUI:ImageButton x:Name="ButtonChangeSeries" Grid.Row="1" Margin="9,2,9,2" ButtonBackground="White" Imaging="/Windows/ChartChange.png" CornerRadius="4,4,4,4" MouseBackground="#FF82B4D4" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" ClickedBackground="#FF3890C8" ImageMargin="2,0,2,0" Grid.Column="1" IsEnabled="False"/>
         </Grid>
-        <GUI:ImageButton x:Name="ButtonSettings" Grid.Column="1" Margin="0,3,2,3" CornerRadius="4,4,4,4" MillisecondsAnimation="80" Imaging="/Windows/icons8-настройки-96.png" ButtonBackground="White" ImageMargin="1,1,1,1" DisabledBackground="#FFA97B7B" HorizontalAlignment="Right" Width="59"/>
+        <GUI:ImageButton x:Name="ButtonSettings" Grid.Column="1" Margin="0,3,2,3" CornerRadius="4,4,4,4" MillisecondsAnimation="80" Imaging="/Windows/Settings.png" ButtonBackground="White" ImageMargin="1,1,1,1" DisabledBackground="#FFA97B7B" HorizontalAlignment="Right" Width="59"/>
         <GUI:TextButton x:Name="ButtonDeveloper" Grid.Column="1" HorizontalAlignment="Right" Margin="0,3,68,3" Texting="D" ButtonBackground="#FFE3FDEA" CornerRadius="4,4,4,4" TextMargin="10,5,10,5" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" FontFamily="Yu Gothic UI" FontWeight="Bold" FontSize="{Binding Height, RelativeSource={RelativeSource Self}}"/>
     </Grid>
 </Window>

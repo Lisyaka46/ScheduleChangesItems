@@ -229,7 +229,7 @@
     <Resource Include="Windows\ChartChange.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\icons8-настройки-96.png" />
+    <Resource Include="Windows\Settings.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
