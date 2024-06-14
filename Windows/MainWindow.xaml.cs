@@ -105,11 +105,6 @@ namespace ScheduleChangesItems
             Title = TitleValue;
             ChartPoint.ChartAreas[0].AxisY.Minimum = 0d;
             TextStatusPoint.Foreground = new SolidColorBrush(Colors.Black);
-            ButtonDeveloper.Click += (sender, e) =>
-            {
-                DialogDeveloper dialogDeveloper = new DialogDeveloper();
-                dialogDeveloper.ShowDialog();
-            };
             ButtonOpenFile.MouseUp += (sender, e) =>
             {
                 DirectoryJobFile = GetGirectoryOpenFile();

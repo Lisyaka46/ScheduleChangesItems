@@ -166,9 +166,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\History.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Windows\ChartAdd.png" />
   </ItemGroup>
   <ItemGroup>

@@ -84,6 +84,6 @@
             <GUI:ImageButton x:Name="ButtonChangePoint" CornerRadius="4,4,4,4" Margin="9,2,9,2" MouseBackground="#FF82B4D4" Imaging="/Windows/DotChange.png" ButtonBackground="White" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" ClickedBackground="#FF3890C8" ImageMargin="2,0,2,0" Grid.Column="1" IsEnabled="False"/>
             <GUI:ImageButton x:Name="ButtonChangeSeries" Grid.Row="1" Margin="9,2,9,2" ButtonBackground="White" Imaging="/Windows/ChartChange.png" CornerRadius="4,4,4,4" MouseBackground="#FF82B4D4" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" ClickedBackground="#FF3890C8" ImageMargin="2,0,2,0" Grid.Column="1" IsEnabled="False"/>
         </Grid>
-        <TextBlock Grid.Column="1" Text="0.3.4a" VerticalAlignment="Center" FontFamily="Cascadia Mono SemiBold" FontSize="13" FontWeight="Medium" FontStyle="Italic" FontStretch="Medium" Margin="0,0,10,0" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="1" Text="0.3.4.2a" VerticalAlignment="Center" FontFamily="Cascadia Mono SemiBold" FontSize="13" FontWeight="Medium" FontStyle="Italic" FontStretch="Medium" Margin="0,0,10,0" HorizontalAlignment="Right"/>
     </Grid>
 </Window>
