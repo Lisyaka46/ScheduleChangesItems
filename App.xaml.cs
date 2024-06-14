@@ -16,6 +16,18 @@ namespace ScheduleChangesItems
     public partial class App : Application
     {
         /// <summary>
+        /// Структура константных значений директорий программы
+        /// </summary>
+        public struct Pathes
+        {
+            /// <summary>
+            /// <b>ДИРЕКТОРИЯ</b> файла настроек
+            /// </summary>
+            public const string PathSettings = "Settings.txt";
+        }
+
+
+        /// <summary>
         /// Объект настроек программы
         /// </summary>
         public static ObjectSettings Setting { get; } = new ObjectSettings();

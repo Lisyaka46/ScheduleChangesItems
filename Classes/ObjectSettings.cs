@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Xml.Linq;
+using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace ScheduleChangesItems.Classes
 {
@@ -15,12 +20,12 @@ namespace ScheduleChangesItems.Classes
         /// <summary>
         /// Видимость состояния позиций
         /// </summary>
-        public ObjectParameter<bool> VisiblyMax_and_Min;
+        public ObjectParameter<bool> VisiblyMax_and_Min { get; private set; }
 
         /// <summary>
         /// Количество видимых позиций графика
         /// </summary>
-        public ObjectParameter<int> CountVisiblePosGraph;
+        public ObjectParameter<int> CountVisiblePosGraph { get; private set; }
 
         /// <summary>
         /// Инициализировать объект настроек с настройками по умолчанию
@@ -29,6 +34,66 @@ namespace ScheduleChangesItems.Classes
         {
             VisiblyMax_and_Min = new ObjectParameter<bool>(true);
             CountVisiblePosGraph = new ObjectParameter<int>(9);
+        }
+
+        /// <summary>
+        /// Прочитать файл настроек
+        /// </summary>
+        /// <param name="LinesSettingParameters">Строки файла настроек</param>
+        public void SetParametersSettingFile(string[] LinesSettingParameters)
+        {
+            Regex regexName = new Regex(@"\b[^:]+");
+            Regex regexValue = new Regex(@" [^\r\n]+");
+            string Name, Value;
+            List<string> LinesSort = new List<string>();
+            for (int i = 0; i < LinesSettingParameters.Length; i++)
+            {
+                Name = regexName.Match(LinesSettingParameters[i]).Value;
+                Value = regexValue.Match(LinesSettingParameters[i]).Value.Trim();
+                if (Name.Length > 0 && Value.Length > 0)
+                {
+                    PropertyInfo PropParameter = GetType().GetProperty(Name);
+                    if (PropParameter != null)
+                    {
+                        Type type = PropParameter.GetValue(this, null).GetType().GetTypeInfo().GenericTypeArguments[0];
+                        if (type == typeof(int)) PropParameter.SetValue(this,
+                            new ObjectParameter<int>(Value, type));
+                        else if (type == typeof(string)) PropParameter.SetValue(this,
+                            new ObjectParameter<string>(Value, type));
+                        else if (type == typeof(bool)) PropParameter.SetValue(this,
+                            new ObjectParameter<bool>(Value.Equals("1"), type));
+                        else continue;
+                    }
+                    else continue;
+                }
+                else continue;
+                LinesSort.Add(LinesSettingParameters[i]);
+            }
+            File.WriteAllLines("Settings.txt", App.Setting.ConvertSettingToLineStrings(), Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Конвертировать настройки в строковые значения тектового файла настроек
+        /// </summary>
+        /// <returns>Массив строк текста для файла настроек</returns>
+        public string[] ConvertSettingToLineStrings()
+        {
+            PropertyInfo[] properties = GetType().GetProperties();
+            string[] MassLines = new string[properties.Length];
+            Type type;
+            for (int i = 0; i < MassLines.Length; i++)
+            {
+                type = properties[i].GetValue(this, null).GetType().GetTypeInfo().GenericTypeArguments[0];
+                MassLines[i] = $"{properties[i].Name}: ";
+                if (type == typeof(int))
+                    MassLines[i] += $"{((ObjectParameter<int>)properties[i].GetValue(this)).Value}";
+                else if (type == typeof(string))
+                    MassLines[i] += $"{((ObjectParameter<string>)properties[i].GetValue(this)).Value}";
+                else if (type == typeof(bool))
+                    MassLines[i] += $"{(((ObjectParameter<bool>)properties[i].GetValue(this)).Value ? 1 : 0)}";
+                else MassLines[i] = string.Empty;
+            }
+            return MassLines;
         }
     }
 
@@ -39,9 +104,9 @@ namespace ScheduleChangesItems.Classes
     public class ObjectParameter<T>
     {
         /// <summary>
-        /// Объект значения параметра
+        /// Значение параметра
         /// </summary>
-        private T Value;
+        public T Value { get; private set; }
 
         /// <summary>
         /// Делегат события управления значением параметра
@@ -67,12 +132,6 @@ namespace ScheduleChangesItems.Classes
         }
 
         /// <summary>
-        /// Узнать текущее значение
-        /// </summary>
-        /// <returns>Текущее значение</returns>
-        public T GetValue() => Value;
-
-        /// <summary>
         /// Инициализировать объект параметра настроек
         /// </summary>
         /// <param name="Value">Значение по умолчанию</param>
@@ -82,9 +141,19 @@ namespace ScheduleChangesItems.Classes
         }
 
         /// <summary>
+        /// Инициализировать объект параметра настроек через привидение типов
+        /// </summary>
+        /// <param name="Value">Значение по умолчанию</param>
+        /// <param name="type">Тип к которому приводится object</param>
+        public ObjectParameter(object Value, Type type)
+        {
+            this.Value = (T)Convert.ChangeType(Value, type);
+        }
+
+        /// <summary>
         /// Преобразование параметра в его зачение
         /// </summary>
-        /// <param name="Param"></param>
-        public static implicit operator T(ObjectParameter<T> Param) => Param.GetValue();
+        /// <param name="Param">Параметр настроек</param>
+        public static implicit operator T(ObjectParameter<T> Param) => Param.Value;
     }
 }

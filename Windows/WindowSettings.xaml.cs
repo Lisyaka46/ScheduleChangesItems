@@ -50,6 +50,10 @@ namespace ScheduleChangesItems.Windows
                 FrameSettings.Navigate(TextSettings);
                 //if (!FrameSettings.CanGoBack) FrameSettings.Navigate(new PageGeneralSettings());
             };
+            Closing += (sender, e) =>
+            {
+                File.WriteAllLines("Settings.txt", App.Setting.ConvertSettingToLineStrings(), Encoding.UTF8);
+            };
         }
     }
 }

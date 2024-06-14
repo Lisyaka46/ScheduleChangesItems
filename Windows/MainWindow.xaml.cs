@@ -27,7 +27,7 @@ namespace ScheduleChangesItems
         /// <summary>
         /// Файл с которым работает программа
         /// </summary>
-        private string DirectoryJobFile = null;
+        public string DirectoryJobFile { get; private set; }
 
         /// <summary>
         /// Константное название главного окна при старте программы
@@ -71,6 +71,9 @@ namespace ScheduleChangesItems
         public MainWindow()
         {
             InitializeComponent();
+            DirectoryJobFile = null;
+            if (File.Exists(App.Pathes.PathSettings)) App.Setting.SetParametersSettingFile(File.ReadAllLines(App.Pathes.PathSettings));
+            else File.AppendAllText(App.Pathes.PathSettings, string.Empty);
             App.Setting.VisiblyMax_and_Min.ValueChange += () =>
             {
                 DoubleAnimation d = new DoubleAnimation()
@@ -82,14 +85,18 @@ namespace ScheduleChangesItems
             };
             App.Setting.CountVisiblePosGraph.ValueChange += () =>
             {
-                UpdatingLimitX();
-                UpdateLimitChating();
+                if (DirectoryJobFile != null)
+                {
+                    UpdatingLimitX();
+                    UpdateLimitChating();
+                }
             };
             AnimStatusPoint = new ColorAnimation(Colors.White, Colors.Black, TimeSpan.FromMilliseconds(600));
             Title = TitleValue;
             ChartPoint.ChartAreas[0].AxisY.Minimum = 0d;
             TextStatusPoint.Foreground = new SolidColorBrush(Colors.Black);
-            ButtonDeveloper.Click += (sender, e) =>
+            TextStatusPoint.Opacity = App.Setting.VisiblyMax_and_Min.Value ? 1 : 0;
+            ButtonDeveloper.MouseUp += (sender, e) =>
             {
                 DialogDeveloper dialogDeveloper = new DialogDeveloper();
                 dialogDeveloper.ShowDialog();
@@ -115,16 +122,14 @@ namespace ScheduleChangesItems
                 if (DirectoryJobFile != null)
                 {
                     MessageBoxResult Result = MessageBox.Show("Вы уверены что хотите закрыть приложение не сохранив изменённые данные?",
-                        $"Закрытие файла {Path.GetFileName(DirectoryJobFile)}", MessageBoxButton.YesNo);
+                        $"Закрытие файла {Path.GetFileName(DirectoryJobFile)}", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (Result == MessageBoxResult.Yes)
                     {
                         ChartPoint.Series.Clear();
                         DirectoryJobFile = null;
+                        return;
                     }
-                    else if (Result == MessageBoxResult.No)
-                    {
-                        e.Cancel = true;
-                    }
+                    e.Cancel = true;
                 }
             };
             ListPointsBox.SelectionChanged += (sender, e) =>

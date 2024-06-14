@@ -10,9 +10,9 @@
 
     <Grid>
         <CheckBox x:Name="VisiblyMaxMin" Content="Отображать состояния значений" HorizontalAlignment="Left" Margin="8,9,0,0" VerticalAlignment="Top"/>
-        <Slider x:Name="VisiblySizePosition" HorizontalAlignment="Left" Margin="144,54,0,0" VerticalAlignment="Top" Minimum="3" Maximum="19" SmallChange="2" LargeChange="2" Value="9" TickFrequency="2" TickPlacement="Both" Width="120" IsSnapToTickEnabled="True"/>
-        <TextBlock HorizontalAlignment="Left" Margin="267,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Value, ElementName=VisiblySizePosition}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="13,44,0,0" TextWrapping="Wrap" Text="Кол-во отображаемых позиций графика" VerticalAlignment="Top" Width="129" TextAlignment="Center"/>
+        <Slider x:Name="VisiblySizePosition" HorizontalAlignment="Left" Margin="8,56,0,0" VerticalAlignment="Top" Minimum="3" Maximum="19" SmallChange="2" LargeChange="2" Value="9" TickFrequency="2" TickPlacement="Both" Width="169" IsSnapToTickEnabled="True"/>
+        <TextBlock HorizontalAlignment="Left" Margin="182,62,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Value, ElementName=VisiblySizePosition}" FontSize="14"/>
+        <TextBlock HorizontalAlignment="Left" Margin="0,35,0,0" TextWrapping="Wrap" Text="Кол-во отображаемых позиций графика" VerticalAlignment="Top" Width="241" TextAlignment="Center" Height="17"/>
 
     </Grid>
 </Page>
