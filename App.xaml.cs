@@ -26,7 +26,6 @@ namespace ScheduleChangesItems
             public const string PathSettings = "Settings.txt";
         }
 
-
         /// <summary>
         /// Объект настроек программы
         /// </summary>

@@ -44,8 +44,11 @@ namespace ScheduleChangesItems.Windows
         /// Создать точку позиции тенденции
         /// </summary>
         /// <returns>Позиция тенденции (Может быть пустой)</returns>
-        internal (string, int)? GenerateTPoint()
+        internal (string, int)? GenerateTPoint(int? StartValue)
         {
+            Title = "Добавление точки тенденции";
+            ButtonComplete.Content = "Создать";
+            TextValue.Text = StartValue.ToString() ?? "0";
             ShowDialog();
             if (Complete) return _point;
             return null;
@@ -60,6 +63,8 @@ namespace ScheduleChangesItems.Windows
         {
             TextName.Text = point.AxisLabel;
             TextValue.Text = ((int)point.YValues[0]).ToString();
+            Title = "Изменение точки тенденции";
+            ButtonComplete.Content = "Изменить";
             ShowDialog();
             if (Complete) return _point;
             return null;

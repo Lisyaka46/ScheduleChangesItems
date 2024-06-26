@@ -64,7 +64,7 @@ namespace ScheduleChangesItems.Windows
                 ChangeTypeSelColor();
             };
             CheckBoxAutoSelectColor.Unchecked += (sender, e) => ChangeTypeSelColor();
-            ButtonCreateSeries.Click += (sender, e) =>
+            ButtonCreateSeries.MouseUp += (sender, e) =>
             {
                 if (TextBoxNameSeries.Text.Length > 0 && !NameSeriesesInicialized.Contains(TextBoxNameSeries.Text))
                 {
@@ -100,6 +100,8 @@ namespace ScheduleChangesItems.Windows
             DefaultColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(VisSeries.ColorDefault.R, VisSeries.ColorDefault.G, VisSeries.ColorDefault.B));
             SelectColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(VisSeries.ColorSelect.R, VisSeries.ColorSelect.G, VisSeries.ColorSelect.B));
             CheckBoxAutoSelectColor.IsChecked = false;
+            ButtonCreateSeries.Texting = "Изменить";
+            Title = "Изменение коллекции";
             ShowDialog();
             if (Complete)
             {
@@ -118,6 +120,8 @@ namespace ScheduleChangesItems.Windows
         public (Series, VisualizationSeries)? GenSeries(string[] NamesSeries)
         {
             NameSeriesesInicialized = NamesSeries;
+            ButtonCreateSeries.Texting = "Создать";
+            Title = "Добавление коллекции";
             ShowDialog();
             if (Complete)
             {
@@ -137,10 +141,8 @@ namespace ScheduleChangesItems.Windows
         /// </summary>
         private void ChangeTypeSelColor()
         {
-            if (CheckBoxAutoSelectColor.IsChecked ?? false)
-                ColorAnim.To = System.Windows.Media.Color.FromRgb(SelectColorAuto.R, SelectColorAuto.G, SelectColorAuto.B);
-            else
-                ColorAnim.To = System.Windows.Media.Color.FromRgb(SelectColor.R, SelectColor.G, SelectColor.B);
+            System.Drawing.Color Coloring = CheckBoxAutoSelectColor.IsChecked ?? false ? SelectColorAuto : SelectColor;
+            ColorAnim.To = System.Windows.Media.Color.FromRgb(Coloring.R, Coloring.G, Coloring.B);
             SelectColorView.Fill.BeginAnimation(SolidColorBrush.ColorProperty, ColorAnim);
         }
 

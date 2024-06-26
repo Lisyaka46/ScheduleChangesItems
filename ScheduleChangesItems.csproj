@@ -202,34 +202,34 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\ChartAdd.png" />
+    <Resource Include="Windows\WindowsImages\Chart\ChartAdd.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\DotDel.png" />
+    <Resource Include="Windows\WindowsImages\Dot\DotDel.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\DotAdd.png" />
+    <Resource Include="Windows\WindowsImages\Dot\DotAdd.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\ChartDel.png" />
+    <Resource Include="Windows\WindowsImages\Chart\ChartDel.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\SaveFile.png" />
+    <Resource Include="Windows\WindowsImages\Tool\SaveFile.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\OpenFile.png" />
+    <Resource Include="Windows\WindowsImages\Tool\OpenFile.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\Dot.png" />
+    <Resource Include="Windows\WindowsImages\Dot\Dot.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\DotChange.png" />
+    <Resource Include="Windows\WindowsImages\Dot\DotChange.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\ChartChange.png" />
+    <Resource Include="Windows\WindowsImages\Chart\ChartChange.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Windows\Settings.png" />
+    <Resource Include="Windows\WindowsImages\Tool\Settings.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

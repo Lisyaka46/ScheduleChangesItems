@@ -152,7 +152,7 @@ namespace ScheduleChangesItems
             ButtonAddNewPoint.MouseUp += (sender, e) =>
             {
                 DialogManagementPoint MPoint = new DialogManagementPoint();
-                (string, int)? point = MPoint.GenerateTPoint();
+                (string, int)? point = MPoint.GenerateTPoint((int)ChartPoint.Series[SelectedIndexSeries].Points[ListPointsBox.SelectedIndex].YValues[0]);
                 if (point != null)
                 {
                     ListPointsBox.Items.Add(point.Value.Item2);
@@ -448,6 +448,9 @@ namespace ScheduleChangesItems
                     Points.Add(ChartPoint.Series[SelectedIndexSeries].Points[i].YValues[0]);
                 double Max = Points.Max() * 1.6;
                 double Min = Points.Min() * 1.6;
+
+                Points.Clear();
+
                 if (Math.Abs(Min) + Max == 0) return;
                 ChartPoint.ChartAreas[0].AxisY.Maximum = Max;
                 if (Min < 0) ChartPoint.ChartAreas[0].AxisY.Minimum = Min;
