@@ -43,6 +43,7 @@ namespace ScheduleChangesItems.Windows
         public DialogManagementSeries()
         {
             InitializeComponent();
+            foreach (string types in Enum.GetNames(typeof(SeriesChartType))) ComboBoxStyleChart.Items.Add(types);
             CheckBoxAutoSelectColor.IsChecked = true;
             DefaultColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
             SelectColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(80, 80, 80));
@@ -90,13 +91,15 @@ namespace ScheduleChangesItems.Windows
         /// <param name="NamesInitSeries">Массив уже проинициализированных имён коллекций</param>
         /// <param name="NameSeries">Имя изменяемой коллекции</param>
         /// <param name="VisSeries">Визуализационный объект коллекции</param>
+        /// <param name="chartType">Тип отображения коллекции который является стартовым значением для выбора типа отображения коллекции</param>
         /// <returns>Коллекция (может быть пустой)</returns>
-        public (string, VisualizationSeries)? ChangeInfoSeries(string[] NamesInitSeries, string NameSeries, VisualizationSeries VisSeries)
+        public (Series, VisualizationSeries)? ChangeInfoSeries(string[] NamesInitSeries, string NameSeries, VisualizationSeries VisSeries, SeriesChartType chartType)
         {
             NameSeriesesInicialized = NamesInitSeries;
             TextBoxNameSeries.Text = NameSeries;
             DefaultColor = VisSeries.ColorDefault;
             SelectColor = VisSeries.ColorSelect;
+            ComboBoxStyleChart.SelectedIndex = (int)chartType;
             DefaultColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(VisSeries.ColorDefault.R, VisSeries.ColorDefault.G, VisSeries.ColorDefault.B));
             SelectColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(VisSeries.ColorSelect.R, VisSeries.ColorSelect.G, VisSeries.ColorSelect.B));
             CheckBoxAutoSelectColor.IsChecked = false;
@@ -105,8 +108,14 @@ namespace ScheduleChangesItems.Windows
             ShowDialog();
             if (Complete)
             {
-                VisualizationSeries Vis = new VisualizationSeries(DefaultColor, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelectColorAuto : SelectColor);
-                return (TextBoxNameSeries.Text, Vis);
+                Series s = new Series
+                {
+                    Color = DefaultColor,
+                    Name = TextBoxNameSeries.Text,
+                    ChartType = (SeriesChartType)ComboBoxStyleChart.SelectedIndex,
+                };
+                VisSeries = new VisualizationSeries(DefaultColor, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelectColorAuto : SelectColor);
+                return (s, VisSeries);
             }
             return null;
         }
@@ -120,6 +129,7 @@ namespace ScheduleChangesItems.Windows
         public (Series, VisualizationSeries)? GenSeries(string[] NamesSeries)
         {
             NameSeriesesInicialized = NamesSeries;
+            ComboBoxStyleChart.SelectedIndex = (int)SeriesChartType.Column;
             ButtonCreateSeries.Texting = "Создать";
             Title = "Добавление коллекции";
             ShowDialog();
@@ -128,7 +138,8 @@ namespace ScheduleChangesItems.Windows
                 Series s = new Series
                 {
                     Color = DefaultColor,
-                    Name = TextBoxNameSeries.Text
+                    Name = TextBoxNameSeries.Text,
+                    ChartType = (SeriesChartType)ComboBoxStyleChart.SelectedIndex,
                 };
                 VisualizationSeries VisSeries = new VisualizationSeries(DefaultColor, (CheckBoxAutoSelectColor.IsChecked ?? false) ? SelectColorAuto : SelectColor);
                 return (s, VisSeries);

@@ -84,6 +84,11 @@ namespace ScheduleChangesItems.Classes.TxtPoint
             /// <summary>
             /// Тег деинсталяции коллекции
             /// </summary>
+            public const string TagStyleChart = "Style";
+
+            /// <summary>
+            /// Тег деинсталяции коллекции
+            /// </summary>
             public const string TagUninstallCollection = "~";
         }
     }

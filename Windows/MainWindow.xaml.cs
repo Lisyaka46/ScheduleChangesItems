@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Navigation;
 using System.Windows.Media.Animation;
+using static ScheduleChangesItems.Classes.TxtPoint.Tag;
 
 namespace ScheduleChangesItems
 {
@@ -112,7 +113,7 @@ namespace ScheduleChangesItems
                         if (VisCollection != null) VisCollection.Clear();
                         else VisCollection = new List<VisualizationSeries>();
                         VisCollection.AddRange(ReadSeries.Value.Item2);
-                        OpenData(ReadSeries.Value.Item1);
+                        OpenData(ReadSeries.Value.Item1, Path.GetFileName(DirectoryJobFile));
                     }
                     else DirectoryJobFile = null;
                 }
@@ -252,17 +253,19 @@ namespace ScheduleChangesItems
             {
                 string NameSeries = ListSeriesesBox.Items[SelectedIndexSeries].ToString();
                 DialogManagementSeries dialogSeries = new DialogManagementSeries();
-                (string, VisualizationSeries)? SeriesChangeInfo =
+                (Series, VisualizationSeries)? SeriesChangeInfo =
                     dialogSeries.ChangeInfoSeries(
-                        ChartPoint.Series.Select((i) => i.Name).Where((i) => !i.Equals(NameSeries)).ToArray(), NameSeries, VisCollection[SelectedIndexSeries]);
+                        ChartPoint.Series.Select((i) => i.Name).Where((i) => !i.Equals(NameSeries)).ToArray(), NameSeries,
+                        VisCollection[SelectedIndexSeries], ChartPoint.Series[SelectedIndexSeries].ChartType);
                 if (SeriesChangeInfo.HasValue)
                 {
                     VisCollection[SelectedIndexSeries] = SeriesChangeInfo.Value.Item2;
-                    ChartPoint.Series[SelectedIndexSeries].Name = SeriesChangeInfo.Value.Item1;
+                    ChartPoint.Series[SelectedIndexSeries].Name = SeriesChangeInfo.Value.Item1.Name;
+                    ChartPoint.Series[SelectedIndexSeries].ChartType = SeriesChangeInfo.Value.Item1.ChartType;
                     ChartPoint.Series[SelectedIndexSeries].Color = VisCollection[SelectedIndexSeries].ColorDefault;
                     ChartPoint.Update();
                     int index = SelectedIndexSeries;
-                    ListSeriesesBox.Items[SelectedIndexSeries] = SeriesChangeInfo.Value.Item1;
+                    ListSeriesesBox.Items[SelectedIndexSeries] = SeriesChangeInfo.Value.Item1.Name;
                     ListSeriesesBox.SelectedIndex = index;
                 }
             };
@@ -340,16 +343,17 @@ namespace ScheduleChangesItems
             {
                 VisSeries = VisCollection[i];
                 series = MassSeries[i];
-                Text += "<Series_Init>\n";
-                Text += $"<Name>{series.Name}<\n";
-                Text += $"<Hex>#{VisSeries.ColorDefault.A:X2}{VisSeries.ColorDefault.R:X2}{VisSeries.ColorDefault.G:X2}{VisSeries.ColorDefault.B:X2}<\n";
-                Text += $"<Select_Hex>#{VisSeries.ColorSelect.A:X2}{VisSeries.ColorSelect.R:X2}{VisSeries.ColorSelect.G:X2}{VisSeries.ColorSelect.B:X2}<\n";
+                Text += $"<{TagNaming.TagSeriesInit}>\n";
+                Text += $"<{TagNaming.TagName}>{series.Name}<\n";
+                Text += $"<{TagNaming.TagStyleChart}>{Enum.GetName(typeof(SeriesChartType), series.ChartType)}<\n";
+                Text += $"<{TagNaming.TagHex}>#{VisSeries.ColorDefault.A:X2}{VisSeries.ColorDefault.R:X2}{VisSeries.ColorDefault.G:X2}{VisSeries.ColorDefault.B:X2}<\n";
+                Text += $"<{TagNaming.TagSelectHex}>#{VisSeries.ColorSelect.A:X2}{VisSeries.ColorSelect.R:X2}{VisSeries.ColorSelect.G:X2}{VisSeries.ColorSelect.B:X2}<\n";
                 foreach (DataPoint p in series.Points)
                 {
-                    Text += $"<Point>{p.YValues[0]}<\n";
-                    if (p.Name.Length > 0) Text += $"<Point_Name>{p.Name}<\n";
+                    Text += $"<{TagNaming.TagPointTrend}>{p.YValues[0]}<\n";
+                    if (p.Name.Length > 0) Text += $"<{TagNaming.TagPointNameTrend}>{p.Name}<\n";
                 }
-                Text += "<~>\n";
+                Text += $"<{TagNaming.TagUninstallCollection}>\n";
                 if (i < MassSeries.Count - 1) Text += "\n";
             }
             return Text;
@@ -374,9 +378,9 @@ namespace ScheduleChangesItems
         /// <summary>
         /// Визуализировать дату
         /// </summary>
-        private void OpenData(Series[] Data)
+        private void OpenData(Series[] Data, string VisualNameFile)
         {
-            Title = $"{TitleValue}: {Path.GetFileName(DirectoryJobFile)}";
+            Title = $"{TitleValue}: {VisualNameFile}";
 
             SelectedIndexSeries = Data.Length - 1;
             SelectedIndexPoint = new List<int>();
@@ -388,6 +392,7 @@ namespace ScheduleChangesItems
                 s.ChartArea = ChartPoint.ChartAreas[0].Name;
                 Array.ForEach(s.Points.ToArray(), (i) => ListPointsBox.Items.Add(i.YValues[0]));
                 s.Enabled = false;
+                //s.ChartType = SeriesChartType.Line;
                 ChartPoint.Series.Add(s);
             }
 

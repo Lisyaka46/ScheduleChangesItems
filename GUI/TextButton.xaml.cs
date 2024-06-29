@@ -189,7 +189,7 @@ namespace ScheduleChangesItems.GUI
         /// <summary>
         /// Размер шрифта текста в кнопке
         /// </summary>
-        public new double FontSize
+        public double FontSizeText
         {
             get
             {
@@ -207,7 +207,7 @@ namespace ScheduleChangesItems.GUI
         public TextButton()
         {
             InitializeComponent();
-            ButtonMainText.FontSize = 12d;
+            FontSizeText = 12d;
             ButtonMainText.Margin = new Thickness(10, 10, 10, 10);
             ClickedBackground = Colors.LightGray;
             DisabledBackground = Colors.Gray;

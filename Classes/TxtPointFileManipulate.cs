@@ -156,6 +156,21 @@ namespace ScheduleChangesItems.Classes
                         return Error.E4(tag.Name);
                     }
                     return Error.E2();
+                case Tag.TagNaming.TagStyleChart:
+                    if (RefSeriesManipulation != null)
+                    {
+                        if (tag.Value.Length > 0)
+                        {
+                            try
+                            {
+                                RefSeriesManipulation.ChartType = (SeriesChartType)Enum.Parse(typeof(SeriesChartType), tag.Value);
+                            }
+                            catch { return Error.E8(); }
+                            break;
+                        }
+                        return Error.E4(tag.Name);
+                    }
+                    return Error.E2();
                 case Tag.TagNaming.TagUninstallCollection:
                     if (RefSeriesManipulation != null)
                     {
@@ -191,19 +206,46 @@ namespace ScheduleChangesItems.Classes
                 };
             }
 
+            /// <summary>
+            /// Несуществующий тег
+            /// </summary>
             public static Error E1(string TagName) => Create($"Тега <{TagName}> не существует.", 1u);
 
+            /// <summary>
+            /// Не проинициализированная коллекция
+            /// </summary>
             public static Error E2() => Create("Коллекция не проинициализирована.", 2u);
 
+            /// <summary>
+            /// Присвоение имени не существующей позиции
+            /// </summary>
             public static Error E3() => Create("Не возможно присвоить имя несуществующей позиции тенденции.", 3u);
 
+            /// <summary>
+            /// Недопустимо пустое значение
+            /// </summary>
             public static Error E4(string TagName) => Create($"Тег <{TagName}> не может быть исполнен с пустым значением.", 4u);
 
+            /// <summary>
+            /// Строка не является числом
+            /// </summary>
             public static Error E5() => Create("Невозможно данную строку обработать как число.", 5u);
 
+            /// <summary>
+            /// Невозможно создать тот же элемент по тегу
+            /// </summary>
+            /// <param name="TagName"></param>
             public static Error E6(string TagName) => Create($"Невозможно создать новый элемент по тегу <{TagName}> так как он уже создан.", 6u);
 
+            /// <summary>
+            /// Невозможно инициализипровать коллекцию
+            /// </summary>
             public static Error E7() => Create("Невозможно инициализировать новую коллекцию не деинсталлировав уже инициализированую.", 7u);
+
+            /// <summary>
+            /// Невозможно создать стиль
+            /// </summary>
+            public static Error E8() => Create("Невозможно создать введёный стиль графика тенденции.", 8u);
         }
     }
 }

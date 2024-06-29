@@ -20,6 +20,9 @@ namespace ScheduleChangesItems.Windows.Pages.Settings
     /// </summary>
     public partial class PageTextSettings : Page
     {
+        /// <summary>
+        /// Страница настроек параметров <b>текста</b> программы
+        /// </summary>
         public PageTextSettings()
         {
             InitializeComponent();

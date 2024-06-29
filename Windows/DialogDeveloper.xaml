@@ -8,20 +8,24 @@
         Title="DialogDeveloper" Height="231" Width="280" WindowStartupLocation="CenterScreen" MinWidth="227" MaxWidth="280" MinHeight="231" MaxHeight="310" ResizeMode="CanMinimize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="84*"/>
-            <RowDefinition Height="98*"/>
+            <RowDefinition Height="97*"/>
+            <RowDefinition Height="85*"/>
             <RowDefinition Height="33*"/>
         </Grid.RowDefinitions>
         <Border BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="10,10,10,10" Margin="2,2,2,2">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="33*"/>
+                    <RowDefinition Height="58*"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="117"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="TextName" TextWrapping="Wrap" Text="Name: X" VerticalAlignment="Center" FontSize="14" Margin="10,1,0,0"/>
-                <TextBlock x:Name="TextValue" Margin="10,0,0,8" TextWrapping="Wrap" Text="Value: X" VerticalAlignment="Bottom" RenderTransformOrigin="0.463,0.763" FontSize="14"/>
-                <Button x:Name="ButtonCheckReadTag" Grid.Column="1" Content="Проверить" Margin="10,20,10,0" VerticalAlignment="Center" FontSize="14"/>
-                <TextBox x:Name="TextBoxTag" Margin="10,6,10,0" TextWrapping="Wrap" Text="&lt;Name&gt;Value&lt;" VerticalAlignment="Top" Grid.ColumnSpan="2" FontSize="14"/>
+                <TextBlock x:Name="TextName" TextWrapping="Wrap" Text="Name: X" VerticalAlignment="Top" FontSize="14" Margin="10,1,0,0" Height="19" Grid.Row="1"/>
+                <TextBlock x:Name="TextValue" Margin="10,0,0,8" TextWrapping="Wrap" Text="Value: X" VerticalAlignment="Bottom" RenderTransformOrigin="0.463,0.763" FontSize="14" Grid.Row="1" Height="19"/>
+                <Button x:Name="ButtonCheckReadTag" Grid.Column="1" Content="Проверить" Margin="10,3,10,0" VerticalAlignment="Center" FontSize="14" Grid.Row="1" Height="23"/>
+                <TextBox x:Name="TextBoxTag" Margin="10,0,10,0" TextWrapping="Wrap" Text="&lt;Name&gt;Value&lt;" VerticalAlignment="Center" Grid.ColumnSpan="2" FontSize="14" Height="21"/>
             </Grid>
         </Border>
 
