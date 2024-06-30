@@ -231,5 +231,10 @@
   <ItemGroup>
     <Resource Include="Windows\WindowsImages\Tool\Settings.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\WindowsImages\Add.png" />
+    <Resource Include="Windows\WindowsImages\Edit.png" />
+    <Resource Include="Windows\WindowsImages\IconProg.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

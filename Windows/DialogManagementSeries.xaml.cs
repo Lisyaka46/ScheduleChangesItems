@@ -104,6 +104,7 @@ namespace ScheduleChangesItems.Windows
             SelectColorView.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(VisSeries.ColorSelect.R, VisSeries.ColorSelect.G, VisSeries.ColorSelect.B));
             CheckBoxAutoSelectColor.IsChecked = false;
             ButtonCreateSeries.Texting = "Изменить";
+            Icon = App.ImageSourceFromBitmap(Properties.Resources.Edit);
             Title = "Изменение коллекции";
             ShowDialog();
             if (Complete)
@@ -131,6 +132,7 @@ namespace ScheduleChangesItems.Windows
             NameSeriesesInicialized = NamesSeries;
             ComboBoxStyleChart.SelectedIndex = (int)SeriesChartType.Column;
             ButtonCreateSeries.Texting = "Создать";
+            Icon = App.ImageSourceFromBitmap(Properties.Resources.Add);
             Title = "Добавление коллекции";
             ShowDialog();
             if (Complete)

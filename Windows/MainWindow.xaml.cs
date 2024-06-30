@@ -72,6 +72,7 @@ namespace ScheduleChangesItems
         public MainWindow()
         {
             InitializeComponent();
+            ButtonDeveloper.IsEnabled = false;
             DirectoryJobFile = null;
             if (File.Exists(App.Pathes.PathSettings)) App.Setting.SetParametersSettingFile(File.ReadAllLines(App.Pathes.PathSettings));
             else File.AppendAllText(App.Pathes.PathSettings, string.Empty);

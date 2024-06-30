@@ -59,14 +59,20 @@ namespace ScheduleChangesItems.Classes
                 CheckErrorTag = Taging(tag);
                 if (CheckErrorTag.Num > 0)
                 {
+                    RefSeriesManipulation = null;
                     MessageBox.Show
                         ($"Произошла ошибка при чтении файла {Path.GetFileName(Directory)}" +
                         "\nПроверьте синтаксис тегов." +
-                        $"\n\n{CheckErrorTag.Message}\nК ошибке привела строка {i}", $"Ошибка чтения файла {Path.GetFileName(Directory)}");
+                        $"\n{Lines[i]}\n{CheckErrorTag.Message}\nК ошибке привела строка {i + 1}", $"Ошибка чтения файла {Path.GetFileName(Directory)}");
                     return null;
                 }
             };
             if (RefSeriesManipulation == null) return (Series.ToArray(), VisObjects.ToArray());
+            else MessageBox.Show
+                        ($"Произошла ошибка при чтении файла {Path.GetFileName(Directory)}" +
+                        "\nНе хватает конечной деинсталляции колекции." +
+                        "\n\nОшибка E0", $"Ошибка чтения файла {Path.GetFileName(Directory)}");
+            RefSeriesManipulation = null;
             return null;
         }
 
@@ -234,7 +240,6 @@ namespace ScheduleChangesItems.Classes
             /// <summary>
             /// Невозможно создать тот же элемент по тегу
             /// </summary>
-            /// <param name="TagName"></param>
             public static Error E6(string TagName) => Create($"Невозможно создать новый элемент по тегу <{TagName}> так как он уже создан.", 6u);
 
             /// <summary>

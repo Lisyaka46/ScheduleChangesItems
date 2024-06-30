@@ -47,6 +47,7 @@ namespace ScheduleChangesItems.Windows
         internal (string, int)? GenerateTPoint(int? StartValue)
         {
             Title = "Добавление точки тенденции";
+            Icon = App.ImageSourceFromBitmap(Properties.Resources.Add);
             ButtonComplete.Content = "Создать";
             TextValue.Text = StartValue.ToString() ?? "0";
             ShowDialog();
@@ -64,6 +65,7 @@ namespace ScheduleChangesItems.Windows
             TextName.Text = point.AxisLabel;
             TextValue.Text = ((int)point.YValues[0]).ToString();
             Title = "Изменение точки тенденции";
+            Icon = App.ImageSourceFromBitmap(Properties.Resources.Edit);
             ButtonComplete.Content = "Изменить";
             ShowDialog();
             if (Complete) return _point;

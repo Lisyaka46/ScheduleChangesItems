@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ScheduleChangesItems.Windows"
         xmlns:GUI="clr-namespace:ScheduleChangesItems.GUI" x:Name="AddSeries" x:Class="ScheduleChangesItems.Windows.DialogManagementSeries"
         mc:Ignorable="d"
-        Title="DialogAddSeries" Height="181" Width="360" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="DialogAddSeries" Height="181" Width="381" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -17,8 +17,8 @@
             <RowDefinition Height="72*"/>
             <RowDefinition Height="38*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="TextBoxNameSeries" TextWrapping="Wrap" Text="Коллекция" VerticalAlignment="Center" Height="19" FontSize="14" Grid.Column="1" BorderThickness="1,0,1,0" VerticalContentAlignment="Center" Margin="0,0,27,0"/>
-        <TextBlock TextWrapping="Wrap" Text="Имя коллекции:" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" Height="19" Width="106"/>
+        <TextBox x:Name="TextBoxNameSeries" TextWrapping="Wrap" Text="Коллекция" VerticalAlignment="Center" FontSize="16" Grid.Column="1" BorderThickness="1,0,1,0" VerticalContentAlignment="Center" Margin="0,0,27,0" FontStyle="Italic" FontFamily="Cascadia Code SemiBold" Padding="0,2,0,0"/>
+        <TextBlock TextWrapping="Wrap" Text="Имя коллекции:" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
         <Grid Grid.ColumnSpan="2" Grid.Row="1" Margin="0,2,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*"/>
@@ -28,7 +28,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <CheckBox x:Name="CheckBoxAutoSelectColor" IsChecked="True" BorderThickness="1,1,1,1" RenderTransformOrigin="0.5,0.5" AutomationProperties.HelpText="???" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="Использ. автомат. цвет" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="15" Width="147"/>
+            <CheckBox x:Name="CheckBoxAutoSelectColor" IsChecked="True" BorderThickness="1,1,1,1" RenderTransformOrigin="0.5,0.5" AutomationProperties.HelpText="???" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="Использ. автомат. цвет" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Padding="2,-1,0,0"/>
             <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6,6,6,6" Margin="5,4,5,4">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -49,10 +49,10 @@
                     <Rectangle x:Name="SelectColorView" HorizontalAlignment="Center" Height="25" Stroke="#FF444444" VerticalAlignment="Center" Width="26" RadiusX="5" RadiusY="5" Fill="#FF505050" Grid.Column="1"/>
                 </Grid>
             </Border>
+            <ComboBox x:Name="ComboBoxStyleChart" Grid.Row="1" VerticalAlignment="Center" BorderThickness="2,1,2,1" FontSize="14" Margin="12,0,12,0"/>
         </Grid>
 
         <GUI:TextButton x:Name="ButtonCreateSeries" Grid.Column="1" Grid.Row="2" Texting="Создать" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" Margin="24,5,24,5" CornerRadius="4,4,4,4" TextMargin="6,6,6,6" FontFamily="Arial" FontSizeText="15"/>
-        <ComboBox x:Name="ComboBoxStyleChart" Grid.Row="1" VerticalAlignment="Bottom" Margin="13,0,13,0" BorderThickness="2,1,2,1" FontSize="14"/>
 
     </Grid>
 </Window>
