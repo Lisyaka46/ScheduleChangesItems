@@ -103,6 +103,10 @@ namespace ScheduleChangesItems
                 DialogDeveloper dialogDeveloper = new DialogDeveloper();
                 dialogDeveloper.ShowDialog();
             };
+            ButtonCreateFile.MouseUp += (sender, e) =>
+            {
+                DirectoryJobFile = GetGirectoryCreateFile();
+            };
             ButtonOpenFile.MouseUp += (sender, e) =>
             {
                 DirectoryJobFile = GetGirectoryOpenFile();
@@ -118,6 +122,35 @@ namespace ScheduleChangesItems
                     }
                     else DirectoryJobFile = null;
                 }
+            };
+            ButtonSaveFile.MouseUp += (sender, e) =>
+            {
+                string SeriesesTaging = SeriesTagging(ChartPoint.Series);
+                File.WriteAllText(DirectoryJobFile, SeriesesTaging);
+                DirectoryJobFile = null;
+                ListSeriesesBox.SelectedIndex = -1;
+                ListPointsBox.SelectedIndex = -1;
+                ListSeriesesBox.Items.Clear();
+                ListPointsBox.Items.Clear();
+                ChartPoint.Series.Clear();
+                Title = TitleValue;
+                TextAllGive.Text = $"Всего было создано: ?";
+                TextAllRemove.Text = $"Всего было использовано: ?";
+                TextMinProcent.Text = "Значение относительно минимума: ?%";
+                TextMaxProcent.Text = "Значение относительно максимума: ?%";
+                TextTrend.Text = "Тенденция относительно предыдущего значения: ?%";
+                TextAllTrendChange.Text = $"Общий процент изменения тенденции: ?%";
+
+                //ButtonCreateFile.IsEnabled = true;
+                ButtonOpenFile.IsEnabled = true;
+                ButtonCreateFile.IsEnabled = true;
+                ButtonSaveFile.IsEnabled = false;
+                ButtonAddNewPoint.IsEnabled = false;
+                ButtonRemovePoint.IsEnabled = false;
+                ButtonChangePoint.IsEnabled = false;
+                ButtonAddNewSeries.IsEnabled = false;
+                ButtonChangeSeries.IsEnabled = false;
+                ButtonRemoveSeries.IsEnabled = false;
             };
             Closing += (sender, e) =>
             {
@@ -183,34 +216,6 @@ namespace ScheduleChangesItems
                     ListPointsBox.Items[SelectedIndexPoint[SelectedIndexSeries]] = point.Value.Item2;
                     ListPointsBox.SelectedIndex = ListPointsBox.Items.Count - 1;
                 }
-            };
-            ButtonSaveFile.MouseUp += (sender, e) =>
-            {
-                string SeriesesTaging = SeriesTagging(ChartPoint.Series);
-                File.WriteAllText(DirectoryJobFile, SeriesesTaging);
-                DirectoryJobFile = null;
-                ListSeriesesBox.SelectedIndex = -1;
-                ListPointsBox.SelectedIndex = -1;
-                ListSeriesesBox.Items.Clear();
-                ListPointsBox.Items.Clear();
-                ChartPoint.Series.Clear();
-                Title = TitleValue;
-                TextAllGive.Text = $"Всего было создано: ?";
-                TextAllRemove.Text = $"Всего было использовано: ?";
-                TextMinProcent.Text = "Значение относительно минимума: ?%";
-                TextMaxProcent.Text = "Значение относительно максимума: ?%";
-                TextTrend.Text = "Тенденция относительно предыдущего значения: ?%";
-                TextAllTrendChange.Text = $"Общий процент изменения тенденции: ?%";
-
-                //ButtonCreateFile.IsEnabled = true;
-                ButtonOpenFile.IsEnabled = true;
-                ButtonSaveFile.IsEnabled = false;
-                ButtonAddNewPoint.IsEnabled = false;
-                ButtonRemovePoint.IsEnabled = false;
-                ButtonChangePoint.IsEnabled = false;
-                ButtonAddNewSeries.IsEnabled = false;
-                ButtonChangeSeries.IsEnabled = false;
-                ButtonRemoveSeries.IsEnabled = false;
             };
             ButtonRemovePoint.MouseUp += (sender, e) =>
             {
@@ -352,7 +357,7 @@ namespace ScheduleChangesItems
                 foreach (DataPoint p in series.Points)
                 {
                     Text += $"<{TagNaming.TagPointTrend}>{p.YValues[0]}<\n";
-                    if (p.Name.Length > 0) Text += $"<{TagNaming.TagPointNameTrend}>{p.Name}<\n";
+                    if (p.AxisLabel.Length > 0) Text += $"<{TagNaming.TagPointNameTrend}>{p.AxisLabel}<\n";
                 }
                 Text += $"<{TagNaming.TagUninstallCollection}>\n";
                 if (i < MassSeries.Count - 1) Text += "\n";
@@ -373,6 +378,18 @@ namespace ScheduleChangesItems
                 Filter = "Алгоритм тенденции (.txtpoint)|*.txtpoint" // Filter files by extension
             };
             if (dialog.ShowDialog() ?? false) return dialog.FileName;
+            return null;
+        }
+
+        /// <summary>
+        /// Узнать директорию создаваемого файла
+        /// </summary>
+        /// <returns>Директория открываемого файла (Может быть пустой)</returns>
+        private static string GetGirectoryCreateFile()
+        {
+
+            DialogCreateThreadFile dialog = new DialogCreateThreadFile();
+            dialog.ShowDialog();
             return null;
         }
 
@@ -399,6 +416,7 @@ namespace ScheduleChangesItems
 
             //ButtonCreateFile.IsEnabled = false;
             ButtonOpenFile.IsEnabled = false;
+            ButtonCreateFile.IsEnabled = false;
             //ButtonRemovePoint.IsEnabled = true;
             if (ListSeriesesBox.Items.Count > 0)
             {

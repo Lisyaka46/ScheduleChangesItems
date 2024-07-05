@@ -1,0 +1,28 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScheduleChangesItems.Windows"
+        xmlns:GUI="clr-namespace:ScheduleChangesItems.GUI" x:Class="ScheduleChangesItems.Windows.DialogCreateThreadFile"
+        mc:Ignorable="d"
+        Title="DialogCreateThreadFile" Height="388" Width="691">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65*"/>
+            <RowDefinition Height="43*"/>
+            <RowDefinition Height="264*"/>
+        </Grid.RowDefinitions>
+
+        <GUI:TextButton x:Name="ButtonComlete" HorizontalAlignment="Left" Margin="521,12,0,0" VerticalAlignment="Top" ButtonBackground="White" MillisecondsAnimation="80" Texting="Создать" Grid.Row="2" Height="38" Width="65"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="532*"/>
+                <ColumnDefinition Width="159*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="TextBoxывдалпорывадплорывдалпорывадплорывапдлоры123ваелдреова908" Margin="10,5,10,5" MaxLines="1" FontFamily="Tahoma" FontWeight="Bold" FontSize="14" TextWrapping="Wrap" IsReadOnly="True" Focusable="False" HorizontalScrollBarVisibility="Hidden" UndoLimit="0"/>
+            <GUI:TextButton x:Name="ButtonReview" ButtonBackground="White" MillisecondsAnimation="80" Texting="Обзор..." Grid.Column="1" Margin="10,5,10,5" TextMargin="6,6,6,6"/>
+        </Grid>
+
+    </Grid>
+</Window>

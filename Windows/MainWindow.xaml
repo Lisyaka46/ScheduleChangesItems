@@ -47,13 +47,14 @@
         </Border>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="71*"/>
-                <ColumnDefinition Width="73*"/>
-                <ColumnDefinition Width="131*"/>
-                <ColumnDefinition Width="382*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
-            <GUI:ImageButton x:Name="ButtonSaveFile" Margin="5,5,5,5" ButtonBackground="White" DisabledBackground="#FFA97B7B" Imaging="/Windows/WindowsImages/Tool/SaveFile.png" MillisecondsAnimation="80" MouseBackground="#FFA0A0A0" Grid.Column="1" ImageMargin="4,0,4,0" CornerRadius="4,4,4,4" IsEnabled="False"/>
-            <GUI:ImageButton x:Name="ButtonOpenFile" Margin="5,5,5,5" Imaging="/Windows/WindowsImages/Tool/OpenFile.png" ButtonBackground="White" CornerRadius="4,4,4,4" ImageMargin="2,0,2,0" MouseBackground="#FFA0A0A0" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B"/>
+            <GUI:ImageButton x:Name="ButtonSaveFile" Margin="6,5,6,5" ButtonBackground="White" DisabledBackground="#FFA97B7B" Imaging="/Windows/WindowsImages/Tool/SaveFile.png" MillisecondsAnimation="80" MouseBackground="#FFA0A0A0" Grid.Column="2" ImageMargin="4,0,4,0" CornerRadius="4,4,4,4" IsEnabled="False" VerticalAlignment="Center"/>
+            <GUI:ImageButton x:Name="ButtonOpenFile" Margin="6,5,6,5" Imaging="/Windows/WindowsImages/Tool/OpenFile.png" ButtonBackground="White" CornerRadius="4,4,4,4" ImageMargin="2,0,2,0" MouseBackground="#FFA0A0A0" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" Grid.Column="1" VerticalAlignment="Center"/>
+            <GUI:ImageButton x:Name="ButtonCreateFile" Margin="6,5,6,5" Imaging="/Windows/AddFile.png" ButtonBackground="White" CornerRadius="4,4,4,4" ImageMargin="2,0,2,1" MouseBackground="#FFA0A0A0" MillisecondsAnimation="80" DisabledBackground="#FFA97B7B" VerticalAlignment="Center"/>
         </Grid>
         <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="1" CornerRadius="10,10,10,10" Margin="2,2,2,2">
             <Grid>

@@ -131,7 +131,7 @@ namespace ScheduleChangesItems.Classes
                     {
                         if (RefSeriesManipulation.Points.Count > 0)
                         {
-                            RefSeriesManipulation.Points[RefSeriesManipulation.Points.Count - 1].Name = tag.Value;
+                            RefSeriesManipulation.Points[RefSeriesManipulation.Points.Count - 1].AxisLabel = tag.Value;
                             break;
                         }
                         return Error.E3();

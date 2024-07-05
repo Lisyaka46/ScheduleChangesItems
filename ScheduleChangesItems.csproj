@@ -92,6 +92,9 @@
     <Compile Include="GUI\TextButton.xaml.cs">
       <DependentUpon>TextButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\DialogCreateThreadFile.xaml.cs">
+      <DependentUpon>DialogCreateThreadFile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Pages\Settings\PageGeneralSettings.xaml.cs">
       <DependentUpon>PageGeneralSettings.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="GUI\ImageButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DialogCreateThreadFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -235,6 +242,12 @@
     <Resource Include="Windows\WindowsImages\Add.png" />
     <Resource Include="Windows\WindowsImages\Edit.png" />
     <Resource Include="Windows\WindowsImages\IconProg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\WindowsImages\Tool\AddFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\AddFile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

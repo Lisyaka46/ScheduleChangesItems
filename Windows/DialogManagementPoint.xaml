@@ -1,24 +1,39 @@
-﻿<Window x:Class="ScheduleChangesItems.Windows.DialogManagementPoint"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleChangesItems.Windows"
+        xmlns:GUI="clr-namespace:ScheduleChangesItems.GUI" x:Class="ScheduleChangesItems.Windows.DialogManagementPoint"
         mc:Ignorable="d"
-        Title="Добавление позиции тенденции" Height="107" Width="375" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="85*"/>
-			<ColumnDefinition Width="89*"/>
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="31"/>
-			<RowDefinition/>
-		</Grid.RowDefinitions>
-		<TextBox x:Name="TextName" TextWrapping="Wrap" VerticalAlignment="Center" Margin="69,0,7,0" MinWidth="89" Height="18"/>
-		<TextBlock TextWrapping="Wrap" Text="Имя точки:" VerticalAlignment="Center" Margin="3,0,115,0" Height="16"/>
-		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Значение*:" VerticalAlignment="Center" Grid.Column="1" Height="16" Width="62" Margin="1,0,0,0"/>
-		<TextBox x:Name="TextValue" Grid.Column="1" TextWrapping="Wrap" Text="80" VerticalAlignment="Center" Margin="64,0,7,0" MinWidth="90" Height="18"/>
-		<Button x:Name="ButtonComplete" Grid.Column="1" Content="Создать" Grid.Row="1" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="20" Margin="12,0,12,0"/>
-	</Grid>
+        Title="Добавление позиции тенденции" Height="158" Width="466" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85*"/>
+            <ColumnDefinition Width="89*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="73*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="TextName" TextWrapping="Wrap" VerticalAlignment="Center" Margin="79,0,6,0" MinWidth="89" BorderThickness="0,0,0,2" Height="18" SelectionBrush="#FF13EA0C" FontWeight="Bold"/>
+        <TextBlock TextWrapping="Wrap" Text="Имя точки:" VerticalAlignment="Center" Margin="3,0,128,0" FontSize="14" Height="18"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Значение*:" VerticalAlignment="Center" Grid.Column="1" Margin="1,0,0,0" FontSize="14" Height="18" Width="70"/>
+        <TextBox x:Name="TextValue" Grid.Column="1" TextWrapping="Wrap" Text="80" VerticalAlignment="Center" Margin="77,0,7,0" MinWidth="90" FontWeight="Bold" BorderThickness="0,0,0,2" Height="18" SelectionBrush="#FF13EA0C"/>
+        <GUI:TextButton x:Name="ButtonComplete" Grid.Column="1" Grid.Row="2" Texting="Создать" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="6,6,6,6" FontFamily="Arial" FontSizeText="15" Margin="8,15,5,15"/>
+        <GUI:TextButton x:Name="ButtonValue_pl1" Grid.Column="1" Grid.Row="1" Texting="+1" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="4,4,4,4" FontFamily="Arial" FontSizeText="12" Margin="8,2,0,2" Width="24" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_pl5" Grid.Column="1" Grid.Row="1" Texting="+5" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="2,2,2,2" FontFamily="Arial" FontSizeText="12" Margin="37,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_pl10" Grid.Column="1" Grid.Row="1" Texting="+10" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="2,2,2,2" FontFamily="Arial" FontSizeText="12" Margin="69,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_pl18" Grid.Column="1" Grid.Row="1" Texting="+18" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="2,2,2,2" FontFamily="Arial" FontSizeText="12" Margin="101,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_pl30" Grid.Column="1" Grid.Row="1" Texting="+30" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="2,2,2,2" FontFamily="Arial" FontSizeText="12" Margin="134,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_pl45" Grid.Column="1" Grid.Row="1" Texting="+45" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="2,2,2,2" FontFamily="Arial" FontSizeText="12" Margin="166,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_mn2" Grid.Column="1" Grid.Row="1" Texting="*2" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MillisecondsAnimation="80" MouseBackground="#FFEDECBD" CornerRadius="4,4,4,4" TextMargin="2,2,2,2" FontFamily="Arial" FontSizeText="12" Margin="198,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_min1" Grid.Row="1" Texting="-1" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFA9A998" MillisecondsAnimation="80" MouseBackground="#FFCECEC7" CornerRadius="4,4,4,4" TextMargin="4,4,4,4" FontFamily="Arial" FontSizeText="12" Margin="195,2,0,2" Width="24" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_min5" Grid.Row="1" Texting="-5" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFA9A998" MillisecondsAnimation="80" MouseBackground="#FFCECEC7" CornerRadius="4,4,4,4" TextMargin="4,4,4,4" FontFamily="Arial" FontSizeText="12" Margin="167,2,0,2" Width="24" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_min10" Grid.Row="1" Texting="-10" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFA9A998" MillisecondsAnimation="80" MouseBackground="#FFCECEC7" CornerRadius="4,4,4,4" TextMargin="4,4,4,4" FontFamily="Arial" FontSizeText="12" Margin="136,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_min15" Grid.Row="1" Texting="-15" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFA9A998" MillisecondsAnimation="80" MouseBackground="#FFCECEC7" CornerRadius="4,4,4,4" TextMargin="4,4,4,4" FontFamily="Arial" FontSizeText="12" Margin="105,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_min30" Grid.Row="1" Texting="-30" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFA9A998" MillisecondsAnimation="80" MouseBackground="#FFCECEC7" CornerRadius="4,4,4,4" TextMargin="4,4,4,4" FontFamily="Arial" FontSizeText="12" Margin="74,2,0,2" Width="27" HorizontalAlignment="Left"/>
+        <GUI:TextButton x:Name="ButtonValue_Com" Grid.Row="1" Texting="+0" ButtonBackground="White" DisabledBackground="#FFA97B7B" ClickedBackground="#FFA9A998" MillisecondsAnimation="80" MouseBackground="#FFCECEC7" CornerRadius="4,4,4,4" TextMargin="4,4,4,4" FontFamily="Cambria" FontSizeText="12" Margin="6,2,0,2" Width="64" HorizontalAlignment="Left" FontWeight="Bold" FontStyle="Italic"/>
+    </Grid>
 </Window>
