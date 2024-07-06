@@ -6,23 +6,35 @@
         xmlns:local="clr-namespace:ScheduleChangesItems.Windows"
         xmlns:GUI="clr-namespace:ScheduleChangesItems.GUI" x:Class="ScheduleChangesItems.Windows.DialogCreateThreadFile"
         mc:Ignorable="d"
-        Title="DialogCreateThreadFile" Height="388" Width="691">
+        Title="DialogCreateThreadFile" Height="200" Width="487" MaxWidth="600" MaxHeight="230" MinWidth="487" MinHeight="195" SizeToContent="Height">
+    <Window.Resources>
+        <AlternationConverter x:Key="AlternationConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="65*"/>
-            <RowDefinition Height="43*"/>
-            <RowDefinition Height="264*"/>
+            <RowDefinition Height="52"/>
+            <RowDefinition MinHeight="30"/>
         </Grid.RowDefinitions>
-
-        <GUI:TextButton x:Name="ButtonComlete" HorizontalAlignment="Left" Margin="521,12,0,0" VerticalAlignment="Top" ButtonBackground="White" MillisecondsAnimation="80" Texting="Создать" Grid.Row="2" Height="38" Width="65"/>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Margin="-1,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="22.008"/>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="26*"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="532*"/>
-                <ColumnDefinition Width="159*"/>
+                <ColumnDefinition Width="94*"/>
+                <ColumnDefinition Width="29*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="TextBoxывдалпорывадплорывдалпорывадплорывапдлоры123ваелдреова908" Margin="10,5,10,5" MaxLines="1" FontFamily="Tahoma" FontWeight="Bold" FontSize="14" TextWrapping="Wrap" IsReadOnly="True" Focusable="False" HorizontalScrollBarVisibility="Hidden" UndoLimit="0"/>
-            <GUI:TextButton x:Name="ButtonReview" ButtonBackground="White" MillisecondsAnimation="80" Texting="Обзор..." Grid.Column="1" Margin="10,5,10,5" TextMargin="6,6,6,6"/>
+            <TextBox x:Name="TextBoxDirectory" Margin="10,3,10,3" MaxLines="1" FontFamily="Tahoma" FontWeight="Bold" FontSize="14" TextWrapping="Wrap" IsReadOnly="True" Focusable="False" HorizontalScrollBarVisibility="Hidden" UndoLimit="0" Grid.Row="1"/>
+            <GUI:TextButton x:Name="ButtonReview" ButtonBackground="White" MillisecondsAnimation="80" Texting="Обзор..." Grid.Column="1" Margin="12,15,12,3" TextMargin="6,6,6,6" FontSizeText="14" Grid.RowSpan="2" ClickedBackground="#FF3890C8" DisabledBackground="#FFA97B7B" CornerRadius="8,8,8,8" MouseBackground="#FF82B4D4"/>
+            <TextBlock x:Name="TextBlockDirectoryInfo" Margin="129,3,1,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=TextBoxNameFile}" VerticalAlignment="Center" Height="19" FontStyle="Italic"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Директория файла:" VerticalAlignment="Center" FontWeight="Bold" Height="16" Width="119"/>
+            <GUI:TextButton x:Name="ButtonComlete" ButtonBackground="White" MillisecondsAnimation="80" Texting="Создать" FontWeight="Bold" FontSizeText="13" Grid.Row="2" Grid.Column="1" Margin="0,7,12,7" CornerRadius="13,13,13,13" DisabledBackground="#FFA97B7B" ClickedBackground="#FFD4D395" MouseBackground="#FFEDECBD"/>
+            <GUI:TextButton x:Name="ButtonCancel" ButtonBackground="White" MillisecondsAnimation="80" Texting="Отмена" FontWeight="Bold" FontSizeText="13" Grid.Row="2" Margin="0,7,11,7" CornerRadius="13,13,13,13" DisabledBackground="#FFA97B7B" ClickedBackground="#FFE66767" MouseBackground="#FFED9595" HorizontalAlignment="Right"/>
         </Grid>
+        <TextBox x:Name="TextBoxNameFile" Margin="10,25,120,5" TextWrapping="Wrap" Text="Tread" MaxLines="1" MaxLength="50"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,7,0,0" TextWrapping="Wrap" Text="Название файла:" VerticalAlignment="Top" Height="16" Width="104" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Right" Margin="0,27,66,0" TextWrapping="Wrap" Text=".txtpoint" VerticalAlignment="Top" FontSize="14"/>
 
     </Grid>
 </Window>

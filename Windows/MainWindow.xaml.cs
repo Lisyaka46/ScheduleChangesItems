@@ -106,22 +106,14 @@ namespace ScheduleChangesItems
             ButtonCreateFile.MouseUp += (sender, e) =>
             {
                 DirectoryJobFile = GetGirectoryCreateFile();
+                if (DirectoryJobFile == null) return;
+                File.WriteAllText(DirectoryJobFile, string.Empty);
+                ReadFileGenObjects();
             };
             ButtonOpenFile.MouseUp += (sender, e) =>
             {
                 DirectoryJobFile = GetGirectoryOpenFile();
-                if (DirectoryJobFile != null)
-                {
-                    (Series[], VisualizationSeries[])? ReadSeries = TxtPointFileManipulate.ReadFile(DirectoryJobFile);
-                    if (ReadSeries.HasValue)
-                    {
-                        if (VisCollection != null) VisCollection.Clear();
-                        else VisCollection = new List<VisualizationSeries>();
-                        VisCollection.AddRange(ReadSeries.Value.Item2);
-                        OpenData(ReadSeries.Value.Item1, Path.GetFileName(DirectoryJobFile));
-                    }
-                    else DirectoryJobFile = null;
-                }
+                ReadFileGenObjects();
             };
             ButtonSaveFile.MouseUp += (sender, e) =>
             {
@@ -171,11 +163,18 @@ namespace ScheduleChangesItems
             {
                 if (ListPointsBox.SelectedIndex == -1) return;
                 UpdatingLimitX();
-                if (SelectedIndexPoint[SelectedIndexSeries] != -1 && SelectedIndexPoint[SelectedIndexSeries] < ChartPoint.Series[SelectedIndexSeries].Points.Count)
-                    ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]].Color = DefaultColorPointSeries;
+                DataPointCollection DataPoints = ChartPoint.Series[SelectedIndexSeries].Points;
+                if (SelectedIndexPoint[SelectedIndexSeries] != -1 && SelectedIndexPoint[SelectedIndexSeries] < DataPoints.Count)
+                {
+                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].Color = DefaultColorPointSeries;
+                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].BorderWidth = 1;
+                }
                 SelectedIndexPoint[SelectedIndexSeries] = ListPointsBox.SelectedIndex;
                 if (SelectedIndexPoint[SelectedIndexSeries] != -1)
-                    ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]].Color = SelectedColorPointSeries;
+                {
+                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].Color = SelectedColorPointSeries;
+                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].BorderWidth = 8;
+                }
                 UpdateLimitChating();
                 _ = UpdateInformation();
             };
@@ -187,7 +186,7 @@ namespace ScheduleChangesItems
             ButtonAddNewPoint.MouseUp += (sender, e) =>
             {
                 DialogManagementPoint MPoint = new DialogManagementPoint();
-                (string, int)? point = MPoint.GenerateTPoint((int)ChartPoint.Series[SelectedIndexSeries].Points[ListPointsBox.SelectedIndex].YValues[0]);
+                (string, int)? point = MPoint.GenerateTPoint(ListPointsBox.SelectedIndex > -1 ? (int)ChartPoint.Series[SelectedIndexSeries].Points[ListPointsBox.SelectedIndex].YValues[0] : 0);
                 if (point != null)
                 {
                     ListPointsBox.Items.Add(point.Value.Item2);
@@ -307,6 +306,28 @@ namespace ScheduleChangesItems
         }
 
         /// <summary>
+        /// Прочитать файл по "DirectoryJobFile" и открыть если прочтение было удачным
+        /// </summary>
+        private void ReadFileGenObjects()
+        {
+            if (DirectoryJobFile != null)
+            {
+                if (DirectoryJobFile.Length > 0)
+                {
+                    (Series[], VisualizationSeries[])? ReadSeries = TxtPointFileManipulate.ReadFile(DirectoryJobFile);
+                    if (ReadSeries.HasValue)
+                    {
+                        if (VisCollection != null) VisCollection.Clear();
+                        else VisCollection = new List<VisualizationSeries>();
+                        VisCollection.AddRange(ReadSeries.Value.Item2);
+                        OpenData(ReadSeries.Value.Item1, Path.GetFileName(DirectoryJobFile));
+                    }
+                    else DirectoryJobFile = null;
+                }
+            }
+        }
+
+        /// <summary>
         /// Обновление границ видимости позиций графика
         /// </summary>
         private void UpdatingLimitX()
@@ -384,13 +405,13 @@ namespace ScheduleChangesItems
         /// <summary>
         /// Узнать директорию создаваемого файла
         /// </summary>
-        /// <returns>Директория открываемого файла (Может быть пустой)</returns>
+        /// <returns>Директория создаваемого файла (Может быть пустой)</returns>
         private static string GetGirectoryCreateFile()
         {
 
-            DialogCreateThreadFile dialog = new DialogCreateThreadFile();
-            dialog.ShowDialog();
-            return null;
+            DialogCreateThreadFile DialogCreateTrend = new DialogCreateThreadFile();
+            string Dir = DialogCreateTrend.CreateFile();
+            return Dir.Length == 0 ? null : Dir;
         }
 
         /// <summary>

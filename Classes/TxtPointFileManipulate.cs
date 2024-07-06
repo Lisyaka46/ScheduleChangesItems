@@ -144,6 +144,7 @@ namespace ScheduleChangesItems.Classes
                         {
                             Color color = ColorTranslator.FromHtml(tag.Value);
                             RefSeriesManipulation.Color = color;
+                            RefSeriesManipulation.BorderColor = color;
                             VisObjects[VisObjects.Count - 1].ColorDefault = color;
                             break;
                         }
