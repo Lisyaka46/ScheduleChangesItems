@@ -7,7 +7,7 @@
         xmlns:dw="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         xmlns:TxtPoint="clr-namespace:ScheduleChangesItems.Classes.TxtPoint" xmlns:Properties="clr-namespace:ScheduleChangesItems.Properties" xmlns:GUI="clr-namespace:ScheduleChangesItems.GUI" x:Class="ScheduleChangesItems.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="428" Width="939" MinWidth="900" MinHeight="417" Icon="/Windows/WindowsImages/IconProg.png">
+        Title="MainWindow" Height="530" Width="939" MinWidth="900" MinHeight="417" Icon="/Windows/WindowsImages/IconProg.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="18*" MaxHeight="40"/>
@@ -59,13 +59,13 @@
         <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" Grid.Row="1" CornerRadius="10,10,10,10" Margin="2,2,2,2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="129*"/>
-                    <RowDefinition Height="20*"/>
-                    <RowDefinition Height="129*"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="25.372"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <ListBox x:Name="ListPointsBox" Margin="3,3,3,3" Grid.Row="2" BorderBrush="Black" BorderThickness="0,1,0,0"/>
                 <ListBox x:Name="ListSeriesesBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="3,3,3,3" BorderThickness="0,0,0,1" BorderBrush="Black"/>
-                <TextBlock x:Name="TextStatusPoint" HorizontalAlignment="Left" Margin="3,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Максимальное значение" VerticalAlignment="Center" Foreground="Black"/>
+                <TextBlock x:Name="TextStatusPoint" Grid.Row="1" TextWrapping="Wrap" Text="Неизвестное значение" Foreground="Black" TextAlignment="Center" Margin="10,3,10,3" FontSize="14" FontStyle="Italic"/>
             </Grid>
         </Border>
         <Grid Grid.Row="2" Margin="1,1,1,1" Grid.Column="1">

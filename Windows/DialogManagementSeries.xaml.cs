@@ -112,6 +112,8 @@ namespace ScheduleChangesItems.Windows
                 Series s = new Series
                 {
                     Color = DefaultColor,
+                    BorderColor = DefaultColor,
+                    BorderWidth = 8,
                     Name = TextBoxNameSeries.Text,
                     ChartType = (SeriesChartType)ComboBoxStyleChart.SelectedIndex,
                 };
@@ -140,6 +142,8 @@ namespace ScheduleChangesItems.Windows
                 Series s = new Series
                 {
                     Color = DefaultColor,
+                    BorderColor = DefaultColor,
+                    BorderWidth = 8,
                     Name = TextBoxNameSeries.Text,
                     ChartType = (SeriesChartType)ComboBoxStyleChart.SelectedIndex,
                 };

@@ -118,7 +118,11 @@ namespace ScheduleChangesItems.Classes
                         {
                             try
                             {
-                                RefSeriesManipulation.Points.AddY(Convert.ToInt32(tag.Value));
+                                RefSeriesManipulation.Points.Add(new DataPoint()
+                                {
+                                    YValues = new double[1] { Convert.ToInt32(tag.Value) },
+                                    BorderWidth = 8
+                                });
                             }
                             catch { return Error.E5(); }
                             break;

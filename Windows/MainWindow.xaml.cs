@@ -126,12 +126,13 @@ namespace ScheduleChangesItems
                 ListPointsBox.Items.Clear();
                 ChartPoint.Series.Clear();
                 Title = TitleValue;
-                TextAllGive.Text = $"Всего было создано: ?";
-                TextAllRemove.Text = $"Всего было использовано: ?";
+                TextAllGive.Text = "Всего было создано: ?";
+                TextAllRemove.Text = "Всего было использовано: ?";
                 TextMinProcent.Text = "Значение относительно минимума: ?%";
                 TextMaxProcent.Text = "Значение относительно максимума: ?%";
                 TextTrend.Text = "Тенденция относительно предыдущего значения: ?%";
-                TextAllTrendChange.Text = $"Общий процент изменения тенденции: ?%";
+                TextAllTrendChange.Text = "Общий процент изменения тенденции: ?%";
+                TextStatusPoint.Text = "Неизвестное значение";
 
                 //ButtonCreateFile.IsEnabled = true;
                 ButtonOpenFile.IsEnabled = true;
@@ -166,14 +167,12 @@ namespace ScheduleChangesItems
                 DataPointCollection DataPoints = ChartPoint.Series[SelectedIndexSeries].Points;
                 if (SelectedIndexPoint[SelectedIndexSeries] != -1 && SelectedIndexPoint[SelectedIndexSeries] < DataPoints.Count)
                 {
-                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].Color = DefaultColorPointSeries;
-                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].BorderWidth = 1;
+                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].Color = default;
                 }
                 SelectedIndexPoint[SelectedIndexSeries] = ListPointsBox.SelectedIndex;
                 if (SelectedIndexPoint[SelectedIndexSeries] != -1)
                 {
                     DataPoints[SelectedIndexPoint[SelectedIndexSeries]].Color = SelectedColorPointSeries;
-                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].BorderWidth = 8;
                 }
                 UpdateLimitChating();
                 _ = UpdateInformation();
@@ -191,8 +190,11 @@ namespace ScheduleChangesItems
                 {
                     ListPointsBox.Items.Add(point.Value.Item2);
 
-                    ChartPoint.Series[SelectedIndexSeries].Points.AddY(point.Value.Item2);
-                    ChartPoint.Series[SelectedIndexSeries].Points[ChartPoint.Series[SelectedIndexSeries].Points.Count - 1].AxisLabel = point.Value.Item1;
+                    ChartPoint.Series[SelectedIndexSeries].Points.Add(new DataPoint()
+                    {
+                        YValues = new double[1] { point.Value.Item2 },
+                        AxisLabel = point.Value.Item1,
+                    });
                     ListPointsBox.SelectedIndex++;
                     if (!ButtonRemovePoint.IsEnabled)
                     {
@@ -210,7 +212,7 @@ namespace ScheduleChangesItems
                 {
                     ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]] = new DataPoint(X, point.Value.Item2)
                     {
-                        AxisLabel = point.Value.Item1
+                        AxisLabel = point.Value.Item1,
                     };
                     ListPointsBox.Items[SelectedIndexPoint[SelectedIndexSeries]] = point.Value.Item2;
                     ListPointsBox.SelectedIndex = ListPointsBox.Items.Count - 1;
@@ -218,7 +220,7 @@ namespace ScheduleChangesItems
             };
             ButtonRemovePoint.MouseUp += (sender, e) =>
             {
-                MessageBoxResult Result = MessageBox.Show($"Вы точно хотите удалить точку \"{ListPointsBox.SelectedItem}\" из коллекции \"{ListSeriesesBox.SelectedItem}\"?",
+                MessageBoxResult Result = MessageBox.Show($"Вы точно хотите удалить точку №{ListPointsBox.SelectedIndex + 1} \"{ListPointsBox.SelectedItem}\" из коллекции \"{ListSeriesesBox.SelectedItem}\"?",
                     "Подтверждение удаления", MessageBoxButton.YesNo);
                 if (Result == MessageBoxResult.Yes)
                 {
@@ -265,9 +267,12 @@ namespace ScheduleChangesItems
                 if (SeriesChangeInfo.HasValue)
                 {
                     VisCollection[SelectedIndexSeries] = SeriesChangeInfo.Value.Item2;
-                    ChartPoint.Series[SelectedIndexSeries].Name = SeriesChangeInfo.Value.Item1.Name;
-                    ChartPoint.Series[SelectedIndexSeries].ChartType = SeriesChangeInfo.Value.Item1.ChartType;
-                    ChartPoint.Series[SelectedIndexSeries].Color = VisCollection[SelectedIndexSeries].ColorDefault;
+                    Series series = ChartPoint.Series[SelectedIndexSeries];
+                    series.Name = SeriesChangeInfo.Value.Item1.Name;
+                    series.ChartType = SeriesChangeInfo.Value.Item1.ChartType;
+                    series.Color = SeriesChangeInfo.Value.Item1.Color;
+                    series.BorderColor = SeriesChangeInfo.Value.Item1.BorderColor;
+                    series.BorderWidth = SeriesChangeInfo.Value.Item1.BorderWidth;
                     ChartPoint.Update();
                     int index = SelectedIndexSeries;
                     ListSeriesesBox.Items[SelectedIndexSeries] = SeriesChangeInfo.Value.Item1.Name;
@@ -558,17 +563,10 @@ namespace ScheduleChangesItems
             TextMaxProcent.Text = $"Значение относительно максимума: {GenStringProcent(TrendMax)}";
             TextTrend.Text = $"Тенденция относительно предыдущего значения: {GenStringProcent(Trend)}";
             TextAllTrendChange.Text = $"Общий процент изменения тенденции: {GenStringProcent(TrendChange)}";
-            if (App.Setting.VisiblyMax_and_Min)
-            {
-                if (ActNum == Points.Max()) TextStatusPoint.Text = "Максимальное значение";
-                else if (ActNum == Points.Min()) TextStatusPoint.Text = "Минимальное значение";
-                else
-                {
-                    TextStatusPoint.Text = "Промежуточное значение";
-                    return;
-                }
-                TextStatusPoint.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, AnimStatusPoint);
-            }
+            string Status = ActNum == Points.Max() ? "Максимальное значение" : (ActNum == Points.Min() ? "Минимальное значение" : "Промежуточное значение");
+            if (TextStatusPoint.Text.Equals(Status)) return;
+            TextStatusPoint.Text = Status;
+            if (App.Setting.VisiblyMax_and_Min) TextStatusPoint.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, AnimStatusPoint);
         }
 
         /// <summary>
