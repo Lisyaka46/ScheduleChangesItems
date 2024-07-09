@@ -46,16 +46,6 @@ namespace ScheduleChangesItems
         private List<int> SelectedIndexPoint;
 
         /// <summary>
-        /// Цвет обычного состояния позиции тенденции
-        /// </summary>
-        private System.Drawing.Color DefaultColorPointSeries;
-
-        /// <summary>
-        /// Цвет выделенной позиции тенденции
-        /// </summary>
-        private System.Drawing.Color SelectedColorPointSeries;
-
-        /// <summary>
         /// Массив визуализационных объектов коллекции
         /// </summary>
         private List<VisualizationSeries> VisCollection;
@@ -172,7 +162,7 @@ namespace ScheduleChangesItems
                 SelectedIndexPoint[SelectedIndexSeries] = ListPointsBox.SelectedIndex;
                 if (SelectedIndexPoint[SelectedIndexSeries] != -1)
                 {
-                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].Color = SelectedColorPointSeries;
+                    DataPoints[SelectedIndexPoint[SelectedIndexSeries]].Color = VisCollection[SelectedIndexSeries].ColorSelect;
                 }
                 UpdateLimitChating();
                 _ = UpdateInformation();
@@ -460,8 +450,6 @@ namespace ScheduleChangesItems
                 ChartPoint.Series[SelectedIndexSeries].Enabled = true;
                 ListSeriesesBox.SelectedIndex = SelectedIndexSeries;
                 ListPointsBox.SelectedIndex = SelectedIndexPoint[SelectedIndexSeries];
-                DefaultColorPointSeries = VisCollection[SelectedIndexSeries].ColorDefault;
-                SelectedColorPointSeries = VisCollection[SelectedIndexSeries].ColorSelect;
             }
         }
 
@@ -477,9 +465,6 @@ namespace ScheduleChangesItems
             ListPointsBox.Items.Clear();
 
             SelectedIndexSeries = index;
-
-            DefaultColorPointSeries = VisCollection[SelectedIndexSeries].ColorDefault;
-            SelectedColorPointSeries = VisCollection[SelectedIndexSeries].ColorSelect;
 
             ChartPoint.Series[SelectedIndexSeries].Enabled = true;
             Array.ForEach(s.Points.ToArray(), (i) => ListPointsBox.Items.Add(i.YValues[0]));
