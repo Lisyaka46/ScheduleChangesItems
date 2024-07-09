@@ -194,6 +194,7 @@ namespace ScheduleChangesItems
                     {
                         YValues = new double[1] { point.Value.Item2 },
                         AxisLabel = point.Value.Item1,
+                        BorderWidth = 8,
                     });
                     ListPointsBox.SelectedIndex++;
                     if (!ButtonRemovePoint.IsEnabled)
@@ -213,6 +214,7 @@ namespace ScheduleChangesItems
                     ChartPoint.Series[SelectedIndexSeries].Points[SelectedIndexPoint[SelectedIndexSeries]] = new DataPoint(X, point.Value.Item2)
                     {
                         AxisLabel = point.Value.Item1,
+                        BorderWidth = 8,
                     };
                     ListPointsBox.Items[SelectedIndexPoint[SelectedIndexSeries]] = point.Value.Item2;
                     ListPointsBox.SelectedIndex = ListPointsBox.Items.Count - 1;
